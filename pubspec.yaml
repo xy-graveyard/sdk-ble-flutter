@@ -1,6 +1,6 @@
 name: sdk_ble_flutter
 description: A new flutter plugin project.
-version: 0.0.1
+version: 0.0.2
 author: Darren Sutherland <developers@xyo.network>
 homepage: https://github.com/XYOracleNetwork/sdk-ble-flutter
 
