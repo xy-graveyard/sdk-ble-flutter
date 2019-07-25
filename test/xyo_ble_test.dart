@@ -1,6 +1,6 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:xyo_ble/xyo_ble.dart';
+import 'package:sdk_ble_flutter/xyo_ble.dart';
 
 void main() {
   const MethodChannel channel = MethodChannel('xyo_ble');

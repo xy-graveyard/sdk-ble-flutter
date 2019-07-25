@@ -1,14 +1,15 @@
-name: xyo_ble
+name: sdk_ble_flutter
 description: A new flutter plugin project.
 version: 0.0.1
-author:
-homepage:
+author: Darren Sutherland <developers@xyo.network>
+homepage: https://github.com/XYOracleNetwork/sdk-ble-flutter
 
 environment:
   sdk: ">=2.1.0 <3.0.0"
 
 dependencies:
-  protobuf: any
+  protobuf: ^0.13.15
+  fixnum: ^0.10.9
   flutter:
     sdk: flutter
 

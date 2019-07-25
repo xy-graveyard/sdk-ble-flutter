@@ -4,14 +4,14 @@ import 'dart:typed_data';
 import 'package:flutter/services.dart' show MethodChannel;
 import 'package:flutter/services.dart';
 
-import 'package:xyo_ble/protos/gatt.pb.dart';
-export 'package:xyo_ble/protos/gatt.pb.dart';
+import 'package:sdk_ble_flutter/protos/gatt.pb.dart';
+export 'package:sdk_ble_flutter/protos/gatt.pb.dart';
 
-import 'package:xyo_ble/protos/device.pb.dart';
-export 'package:xyo_ble/protos/device.pb.dart';
+import 'package:sdk_ble_flutter/protos/device.pb.dart';
+export 'package:sdk_ble_flutter/protos/device.pb.dart';
 
-import 'package:xyo_ble/protos/bound_witness.pb.dart';
-export 'package:xyo_ble/protos/bound_witness.pb.dart';
+import 'package:sdk_ble_flutter/protos/bound_witness.pb.dart';
+export 'package:sdk_ble_flutter/protos/bound_witness.pb.dart';
 
 class XyoBle {
   static const MethodChannel _channel =
