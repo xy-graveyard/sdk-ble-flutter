@@ -25,19 +25,19 @@ class XYBluetoothManager {
     class func setup() {
         // Clear archivists if new user logs in
         BridgeManager.instance.bridge.archivists.removeAll()
-
-        // TOOD update adding archivists
-        let dns = "alpha-peers.xyo.network"
-        let port = 11001
-
-        BridgeManager.instance.bridge.archivists["\(dns):\(port)"] = XyoTcpPeer(ip: dns, port: UInt32(port))
-
-        // Add archivists
-//        XYQueryCache.sharedInstance().myAttachedArchivists.queryData.queryModels.forEach { data in
-//            if let dns = data.dns, let port = data.boundWitnessServerPort {
-//                XYBridgeManager.instance.bridge.archivists["\(dns):\(port)"] = XyoTcpPeer(ip: dns, port: UInt32(port))
-//            }
-//        }
+//
+//        // TOOD update adding archivists
+//        let dns = "alpha-peers.xyo.network"
+//        let port = 11001
+//
+//        BridgeManager.instance.bridge.archivists["\(dns):\(port)"] = XyoTcpPeer(ip: dns, port: UInt32(port))
+//
+//        // Add archivists
+////        XYQueryCache.sharedInstance().myAttachedArchivists.queryData.queryModels.forEach { data in
+////            if let dns = data.dns, let port = data.boundWitnessServerPort {
+////                XYBridgeManager.instance.bridge.archivists["\(dns):\(port)"] = XyoTcpPeer(ip: dns, port: UInt32(port))
+////            }
+////        }
     }
 
     class func start() {
@@ -94,3 +94,23 @@ class XYBluetoothManager {
 
 }
 
+// MARK:
+extension XYBluetoothManager {
+
+    class func addArchivists(archivists: Any) {
+        guard
+            let map = archivists as? Dictionary<String, Any>,
+            let list = map["archivists"] as? Array<Dictionary<String, Any>>
+            else { return }
+
+        for archivist in list {
+            guard
+                let dns = archivist["dns"] as? String,
+                let port = archivist["port"] as? Int
+                else { continue }
+
+            BridgeManager.instance.bridge.archivists["\(dns):\(port)"] = XyoTcpPeer(ip: dns, port: UInt32(port))
+        }
+    }
+
+}

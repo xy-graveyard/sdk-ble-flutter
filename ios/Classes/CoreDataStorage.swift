@@ -84,6 +84,8 @@ final public class CoreDataStorage: XyoStorageProvider {
         case value
     }
 
+    public init() {}
+
     // Loads the core data DB from the framework
     fileprivate lazy var container: NSPersistentContainer = {
         let messageKitBundle = Bundle(for: type(of: self))

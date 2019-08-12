@@ -2,12 +2,12 @@ package network.xyo.ble.xyo_ble
 
 import com.google.protobuf.ByteString
 import io.flutter.plugin.common.MethodChannel
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
 import network.xyo.ble.devices.XYBluetoothDevice
-import network.xyo.ble.devices.XYIBeaconBluetoothDevice
+import network.xyo.ble.gatt.peripheral.IXYBluetoothResult
 import network.xyo.ble.gatt.peripheral.XYBluetoothResult
-import network.xyo.ble.gatt.server.XYBluetoothCharacteristic
-import network.xyo.ble.gatt.server.XYBluetoothService
-import network.xyo.ble.services.standard.AlertNotificationService
 import java.nio.charset.Charset
 
 open class GattRequestHandler {
@@ -32,13 +32,13 @@ open class GattRequestHandler {
         }
 
         // Build a success response that has data
-        fun response(request: Gatt.GattOperation, response: XYBluetoothResult<Any>?): Gatt.GattResponse {
+        fun response(request: Gatt.GattOperation, response: IXYBluetoothResult?): Gatt.GattResponse {
             val result = Gatt.GattResponse.newBuilder()
                     .setDeviceId(request.deviceId)
                     .setGattCall(request.gattCall)
-                    .setResponse(ByteString.copyFrom(response?.value.toString(), Charset.defaultCharset()))
-            if (response?.error != null) {
-                result.setError(response.error.toString())
+                    .setResponse(ByteString.copyFrom(response?.getValueString(), Charset.defaultCharset()))
+            if (response?.getBluetoothError() != null) {
+                result.setError(response.getBluetoothError().toString())
             }
             return result.build()
         }
@@ -53,21 +53,24 @@ open class GattRequestHandler {
         }
 
         // Make the gatt call
-        fun runCall(device: XYBluetoothDevice, operation: Gatt.GattOperation): XYBluetoothResult<Any> {
-            when(operation.operationCase) {
-                Gatt.GattOperation.OperationCase.GATT_CALL -> {
-                }
-                Gatt.GattOperation.OperationCase.DEFINED_OPERATION -> {
-                }
-                Gatt.GattOperation.OperationCase.OPERATION_NOT_SET -> {
+        fun runCall(device: XYBluetoothDevice, operation: Gatt.GattOperation): Deferred<IXYBluetoothResult> {
+            return GlobalScope.async {
+                var bleResult: IXYBluetoothResult? = null
+                when(operation.operationCase) {
+                    Gatt.GattOperation.OperationCase.GATT_CALL -> {
+                    }
+                    Gatt.GattOperation.OperationCase.DEFINED_OPERATION -> {
+                        bleResult = GattDefinedOperationHandler.process(device, operation.definedOperation).await()
+                    }
+                    Gatt.GattOperation.OperationCase.OPERATION_NOT_SET -> {
 
+                    }
+                    else -> {
+                        bleResult = XYBluetoothResult<Any>(false)
+                    }
                 }
-                else -> {
-
-                }
+                return@async bleResult ?: XYBluetoothResult(false)
             }
-            val bleResult = XYBluetoothResult<Any>(null)
-            return bleResult
         }
 
         fun relayResponse(response: Gatt.GattResponse?, result: MethodChannel.Result) {

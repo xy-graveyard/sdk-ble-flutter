@@ -48,12 +48,13 @@ final class AddDeviceListener {
     let addDeviceHandler = AddDeviceEventChannel()
 
     func startListening() {
-        XYBluetoothManager.listenForXy4 { [weak self] device in
-            self?.xy4Device = device as? XYFinderDevice
-            if let xy4Device = self?.xy4Device {
-                self?.addDeviceHandler.sendMessage(xy4Device)
-            }
-        }
+        // No listening for XY4 since we aren't doing the firmware upgrade at this time
+//        XYBluetoothManager.listenForXy4 { [weak self] device in
+//            self?.xy4Device = device as? XYFinderDevice
+//            if let xy4Device = self?.xy4Device {
+//                self?.addDeviceHandler.sendMessage(xy4Device)
+//            }
+//        }
 
         // Trigger the Sentinel flow if a button is pressed
         XyoSentinelXManager.addListener(key: "XYAddOwnershipViewCoordinator") { [weak self] device, _ in

@@ -10,7 +10,8 @@ export 'package:sdk_ble_flutter/protos/gatt.pb.dart';
 import 'package:sdk_ble_flutter/protos/device.pb.dart';
 export 'package:sdk_ble_flutter/protos/device.pb.dart';
 
-import 'package:sdk_ble_flutter/protos/bound_witness.pb.dart';
+import 'package:sdk_ble_flutter/classes/archivist.dart';
+
 export 'package:sdk_ble_flutter/protos/bound_witness.pb.dart';
 
 class XyoBle {
@@ -25,6 +26,16 @@ class XyoBle {
 
   static const EventChannel addDevice =
       const EventChannel('network.xyo/add_device');
+
+  // Set the archivists
+  static Future<bool> setArchivists(List<ArchivistModel> archivists) async {
+    final List<Map<String, dynamic>> values =
+        archivists.map((a) => {'dns': a.dns, 'port': a.port}).toList();
+
+    return await _channel.invokeMethod('setArchivists', <String, dynamic>{
+      'archivists': values,
+    });
+  }
 
   // Start collecting bound witness data
   static Future<bool> startBoundWitness() async {
@@ -46,6 +57,11 @@ class XyoBle {
     return await _channel.invokeMethod('addDeviceStopListening');
   }
 
+  // Get the device public key
+  static Future<String> getDevicePublicKey() async {
+    return await _channel.invokeMethod('getDevicePublicKey');
+  }
+
   /// Run one defined operation on a single device
   static Future<GattResponse> defined(
       BluetoothDevice device, DefinedOperation operation) async {
@@ -58,8 +74,12 @@ class XyoBle {
       'request': gattOp.writeToBuffer(),
     });
 
-    final GattResponse response = GattResponse.fromBuffer(rawData);
-    return response;
+    if (rawData != null) {
+      final GattResponse response = GattResponse.fromBuffer(rawData);
+      return response;
+    } else {
+      return GattResponse.getDefault();
+    }
   }
 
   /// Run one GATT call on a single device

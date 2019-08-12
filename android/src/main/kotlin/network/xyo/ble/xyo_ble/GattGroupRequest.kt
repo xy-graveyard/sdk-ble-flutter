@@ -5,6 +5,7 @@ import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import network.xyo.ble.gatt.peripheral.IXYBluetoothResult
 import network.xyo.ble.gatt.peripheral.XYBluetoothResult
 import network.xyo.ble.scanner.XYSmartScan
 
@@ -30,7 +31,7 @@ class GattGroupRequest: GattRequestHandler() {
                 for (operation in operations.operationsList) {
                     val device = smartScan.devices[operation.deviceId] ?: return@async null
                     device.connection {
-                        val result = runCall(device, operation)
+                        val result = runCall(device, operation).await()
                         responses.add(response(operation, result))
                         return@connection XYBluetoothResult(true)
                     }.await()

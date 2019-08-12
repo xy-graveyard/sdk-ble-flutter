@@ -10,7 +10,7 @@ export 'package:sdk_ble_flutter/protos/gatt.pb.dart';
 import 'package:sdk_ble_flutter/protos/device.pb.dart';
 export 'package:sdk_ble_flutter/protos/device.pb.dart';
 
-import 'package:sdk_ble_flutter/protos/bound_witness.pb.dart';
+import 'package:sdk_ble_flutter/classes/archivist.dart';
 export 'package:sdk_ble_flutter/protos/bound_witness.pb.dart';
 
 class XyoBle {
@@ -25,6 +25,20 @@ class XyoBle {
 
   static const EventChannel addDevice =
       const EventChannel('network.xyo/add_device');
+
+  // Set the archivists
+  static Future<bool> setArchivists(List<ArchivistModel> archivists) async {
+    final List<Map<String, dynamic>> values =
+        archivists.map((a) => {'dns': a.dns, 'port': a.port}).toList();
+
+    final Uint8List rawData =
+        await _channel.invokeMethod('setArchivists', <String, dynamic>{
+      'archivists': values,
+    });
+
+    final response = rawData as bool;
+    return response;
+  }
 
   // Start collecting bound witness data
   static Future<bool> startBoundWitness() async {

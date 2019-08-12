@@ -14,7 +14,9 @@ public class SwiftXyoBlePlugin: NSObject, FlutterPlugin {
         startBoundWitness,
         stopBoundWitness,
         addDeviceStartListening,
-        addDeviceStopListening
+        addDeviceStopListening,
+        setArchivists,
+        getDevicePublicKey
     }
 
     fileprivate static let scannerWrapper = SmartScanWrapper()
@@ -70,6 +72,11 @@ public class SwiftXyoBlePlugin: NSObject, FlutterPlugin {
         case .addDeviceStopListening:
             SwiftXyoBlePlugin.addDevice.doneListening()
             result(true)
+        case .setArchivists:
+            XYBluetoothManager.addArchivists(archivists: call.arguments)
+            result(true)
+        case .getDevicePublicKey:
+            result(BridgeManager.instance.primaryPublicKeyAsString)
         }
     }
 

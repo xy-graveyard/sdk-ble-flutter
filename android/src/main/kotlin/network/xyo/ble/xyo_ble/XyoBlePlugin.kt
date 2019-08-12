@@ -108,25 +108,49 @@ class XyoBlePlugin(context: Context, registrar: Registrar): MethodCallHandler, X
     GlobalScope.launch {
       Log.i("XyoBlePlugin", "onMethodCall: " + call.method)
       if (call.method == "getPlatformVersion") {
-        result.success("Android ${android.os.Build.VERSION.RELEASE}")
+        ui {
+          result.success("Android ${android.os.Build.VERSION.RELEASE}")
+        }
       } else if (call.method == "gattSingle") {
-        result.success(this@XyoBlePlugin.gattSingle(call, result).await())
+        ui {
+          result.success(this@XyoBlePlugin.gattSingle(call, result).await())
+        }
       } else if (call.method == "gattGroup") {
-        result.success(this@XyoBlePlugin.gattGroup(call, result).await())
+        ui {
+          result.success(this@XyoBlePlugin.gattGroup(call, result).await())
+        }
       } else if (call.method == "gattList") {
-        result.success(this@XyoBlePlugin.gattList(call, result).await())
+        ui {
+          result.success(this@XyoBlePlugin.gattList(call, result).await())
+        }
       } else if (call.method == "startBoundWitness") {
         ui {
           result.success(this@XyoBlePlugin.startBoundWitness())
         }
       } else if (call.method == "stopBoundWitness") {
-        result.success(this@XyoBlePlugin.stopBoundWitness())
+        ui {
+          result.success(this@XyoBlePlugin.stopBoundWitness())
+        }
       } else if (call.method == "addDeviceStartListening") {
-        result.success(this@XyoBlePlugin.addDeviceStartListening())
+        ui {
+          result.success(this@XyoBlePlugin.addDeviceStartListening())
+        }
       } else if (call.method == "addDeviceStopListening") {
-        result.success(this@XyoBlePlugin.addDeviceStopListening())
+        ui {
+          result.success(this@XyoBlePlugin.addDeviceStopListening())
+        }
+      } else if (call.method == "setArchivists") {
+        ui {
+          result.success(true)
+        }
+      } else if (call.method == "getDevicePublicKey") {
+        ui {
+          result.success("TODO")
+        }
       } else {
-        result.notImplemented()
+        ui {
+          result.notImplemented()
+        }
       }
     }
   }
