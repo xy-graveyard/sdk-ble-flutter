@@ -4,6 +4,7 @@ import io.flutter.plugin.common.MethodChannel
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
+import network.xyo.ble.flutter.protobuf.Gatt
 import network.xyo.ble.gatt.peripheral.IXYBluetoothResult
 import network.xyo.ble.gatt.peripheral.XYBluetoothResult
 import network.xyo.ble.scanner.XYSmartScan

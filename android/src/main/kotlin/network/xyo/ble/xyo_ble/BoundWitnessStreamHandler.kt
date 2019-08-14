@@ -1,6 +1,7 @@
 package network.xyo.ble.xyo_ble
 
 import io.flutter.plugin.common.EventChannel
+import network.xyo.ble.flutter.protobuf.BoundWitness
 
 data class DeviceBoundWitness(
   val bytes: String = String(),

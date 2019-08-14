@@ -5,6 +5,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import network.xyo.ble.devices.XYBluetoothDevice
 import network.xyo.ble.devices.XYFinderBluetoothDevice
+import network.xyo.ble.flutter.protobuf.Gatt
 import network.xyo.ble.gatt.peripheral.IXYBluetoothResult
 import network.xyo.ble.gatt.peripheral.XYBluetoothResult
 import network.xyo.modbluetoothkotlin.client.XyoSentinelX
@@ -13,6 +14,7 @@ class GattDefinedOperationHandler {
 
     companion object {
         // Run the operations
+        @kotlin.ExperimentalUnsignedTypes
         fun process(device: XYBluetoothDevice, operation: Gatt.DefinedOperation): Deferred<IXYBluetoothResult?> {
             return GlobalScope.async {
                 val finder = device as? XYFinderBluetoothDevice

@@ -1,0 +1,27 @@
+-- Merging decision tree log ---
+manifest
+ADDED from /Users/arietrouw/GitHub/sdk-ble-flutter/android/src/main/AndroidManifest.xml:1:1-5:12
+INJECTED from /Users/arietrouw/GitHub/sdk-ble-flutter/android/src/main/AndroidManifest.xml:1:1-5:12
+INJECTED from /Users/arietrouw/GitHub/sdk-ble-flutter/android/src/main/AndroidManifest.xml:1:1-5:12
+	package
+		ADDED from /Users/arietrouw/GitHub/sdk-ble-flutter/android/src/main/AndroidManifest.xml:2:3-36
+		INJECTED from /Users/arietrouw/GitHub/sdk-ble-flutter/android/src/main/AndroidManifest.xml
+		INJECTED from /Users/arietrouw/GitHub/sdk-ble-flutter/android/src/main/AndroidManifest.xml
+	xmlns:android
+		ADDED from /Users/arietrouw/GitHub/sdk-ble-flutter/android/src/main/AndroidManifest.xml:1:11-69
+uses-permission#android.permission.BLUETOOTH
+ADDED from /Users/arietrouw/GitHub/sdk-ble-flutter/android/src/main/AndroidManifest.xml:3:5-67
+	android:name
+		ADDED from /Users/arietrouw/GitHub/sdk-ble-flutter/android/src/main/AndroidManifest.xml:3:22-65
+uses-permission#android.permission.BLUETOOTH_ADMIN
+ADDED from /Users/arietrouw/GitHub/sdk-ble-flutter/android/src/main/AndroidManifest.xml:4:5-73
+	android:name
+		ADDED from /Users/arietrouw/GitHub/sdk-ble-flutter/android/src/main/AndroidManifest.xml:4:22-71
+uses-sdk
+INJECTED from /Users/arietrouw/GitHub/sdk-ble-flutter/android/src/main/AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from /Users/arietrouw/GitHub/sdk-ble-flutter/android/src/main/AndroidManifest.xml
+INJECTED from /Users/arietrouw/GitHub/sdk-ble-flutter/android/src/main/AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from /Users/arietrouw/GitHub/sdk-ble-flutter/android/src/main/AndroidManifest.xml
+		ADDED from /Users/arietrouw/GitHub/sdk-ble-flutter/android/src/main/AndroidManifest.xml
+		INJECTED from /Users/arietrouw/GitHub/sdk-ble-flutter/android/src/main/AndroidManifest.xml
