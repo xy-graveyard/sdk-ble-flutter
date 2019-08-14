@@ -145,7 +145,7 @@ class XyoBlePlugin(context: Context, registrar: Registrar): MethodCallHandler, X
         }
       } else if (call.method == "getDevicePublicKey") {
         ui {
-          result.success("TODO")
+          result.success(this@XyoBlePlugin.bridgeManager.getPrimaryPublicKeyAsString())
         }
       } else {
         ui {
