@@ -37,7 +37,7 @@ public class SwiftXyoBlePlugin: NSObject, FlutterPlugin {
         addDeviceChannel.setStreamHandler(self.addDevice.addDeviceHandler)
 
         // Set up the method channel listener
-        let gattChannel = FlutterMethodChannel(name: "network.xyo/xyo_ble", binaryMessenger: registrar.messenger())
+        let gattChannel = FlutterMethodChannel(name: "network.xyo/sdk", binaryMessenger: registrar.messenger())
         let gattInstance = SwiftXyoBlePlugin()
         registrar.addMethodCallDelegate(gattInstance, channel: gattChannel)
 

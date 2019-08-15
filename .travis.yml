@@ -12,8 +12,9 @@ before_script:
   - git clone https://github.com/flutter/flutter.git -b master
   - ./flutter/bin/flutter doctor
 script:
-  - ./flutter/bin/flutter test
-  - ls $HOME/.pub-cache
+  - cd example
+  - ./flutter/bin/flutter build apk
+  - ./flutter/bin/flutter build ios
 deploy:
   provider: script
   script: bash deploy.sh

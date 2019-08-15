@@ -1,76 +1,30 @@
 import 'dart:async';
 import 'dart:typed_data';
 
-import 'package:flutter/services.dart' show MethodChannel;
 import 'package:flutter/services.dart';
-
 import 'package:sdk_ble_flutter/protos/gatt.pb.dart';
 export 'package:sdk_ble_flutter/protos/gatt.pb.dart';
 
 import 'package:sdk_ble_flutter/protos/device.pb.dart';
 export 'package:sdk_ble_flutter/protos/device.pb.dart';
 
-import 'package:sdk_ble_flutter/classes/archivist.dart';
-
 export 'package:sdk_ble_flutter/protos/bound_witness.pb.dart';
 
-class XyoBle {
-  static const MethodChannel _channel =
-      const MethodChannel('network.xyo/xyo_ble');
+class XyoDevice {
 
-  static const EventChannel smartScan =
-      const EventChannel('network.xyo/smartscan');
+  MethodChannel channel;
 
-  static const EventChannel deviceBoundWitness =
-      const EventChannel('network.xyo/boundwitness');
-
-  static const EventChannel addDevice =
-      const EventChannel('network.xyo/add_device');
-
-  // Set the archivists
-  static Future<bool> setArchivists(List<ArchivistModel> archivists) async {
-    final List<Map<String, dynamic>> values =
-        archivists.map((a) => {'dns': a.dns, 'port': a.port}).toList();
-
-    return await _channel.invokeMethod('setArchivists', <String, dynamic>{
-      'archivists': values,
-    });
-  }
-
-  // Start collecting bound witness data
-  static Future<bool> startBoundWitness() async {
-    return await _channel.invokeMethod('startBoundWitness');
-  }
-
-  // Stop collecting bound witness data
-  static Future<bool> stopBoundWitness() async {
-    return await _channel.invokeMethod('stopBoundWitness');
-  }
-
-  // Start listening for button presses on devices
-  static Future<bool> startAddDevice() async {
-    return await _channel.invokeMethod('addDeviceStartListening');
-  }
-
-  // Stop listening for button presses on devices
-  static Future<bool> stopAddDevice() async {
-    return await _channel.invokeMethod('addDeviceStopListening');
-  }
-
-  // Get the device public key
-  static Future<String> getDevicePublicKey() async {
-    return await _channel.invokeMethod('getDevicePublicKey');
-  }
+  XyoDevice(this.channel);
 
   /// Run one defined operation on a single device
-  static Future<GattResponse> defined(
+  Future<GattResponse> defined(
       BluetoothDevice device, DefinedOperation operation) async {
     final gattOp = GattOperation();
     gattOp.definedOperation = operation;
     gattOp.deviceId = device.id;
 
     final Uint8List rawData =
-        await _channel.invokeMethod('gattSingle', <String, dynamic>{
+        await channel.invokeMethod('gattSingle', <String, dynamic>{
       'request': gattOp.writeToBuffer(),
     });
 
@@ -83,7 +37,7 @@ class XyoBle {
   }
 
   /// Run one GATT call on a single device
-  static Future<GattResponse> operation(BluetoothDevice device,
+  Future<GattResponse> operation(BluetoothDevice device,
       String serviceUuid, String characteristicUuid) async {
     final gattCall = GattCall();
     gattCall.serviceUuid = serviceUuid;
@@ -94,7 +48,7 @@ class XyoBle {
     gattOp.gattCall = gattCall;
 
     final Uint8List rawData =
-        await _channel.invokeMethod('gattSingle', <String, dynamic>{
+        await channel.invokeMethod('gattSingle', <String, dynamic>{
       'request': gattOp.writeToBuffer(),
     });
 
@@ -102,7 +56,7 @@ class XyoBle {
     return response;
   }
 
-  static Future<GattResponse> get definedListDifferentDevices async {
+  Future<GattResponse> get definedListDifferentDevices async {
     final gattOp1 = GattOperation();
     gattOp1.definedOperation = DefinedOperation.SONG;
     gattOp1.deviceId =
@@ -120,7 +74,7 @@ class XyoBle {
     operations.disconnectOnCompletion = true;
 
     final Uint8List rawData =
-        await _channel.invokeMethod('gattList', <String, dynamic>{
+        await channel.invokeMethod('gattList', <String, dynamic>{
       'request': operations.writeToBuffer(),
     });
 
@@ -128,14 +82,14 @@ class XyoBle {
     return response;
   }
 
-  static Future<GattResponse> get buzzerDefined async {
+  Future<GattResponse> get buzzerDefined async {
     final buzzer = GattOperation();
     buzzer.definedOperation = DefinedOperation.SONG;
     buzzer.deviceId =
         'xy:ibeacon:a44eacf4-0104-0000-0000-5f784c9977b5.69.17896';
 
     final Uint8List rawData =
-        await _channel.invokeMethod('gattSingle', <String, dynamic>{
+        await channel.invokeMethod('gattSingle', <String, dynamic>{
       'request': buzzer.writeToBuffer(),
     });
 
@@ -143,7 +97,7 @@ class XyoBle {
     return response;
   }
 
-  static Future<GattResponse> get buzzerDefinedGroup async {
+  Future<GattResponse> get buzzerDefinedGroup async {
     final buzzer = GattOperation();
     buzzer.definedOperation = DefinedOperation.SONG;
 
@@ -156,7 +110,7 @@ class XyoBle {
     operations.disconnectOnCompletion = true;
 
     final Uint8List rawData =
-        await _channel.invokeMethod('gattGroup', <String, dynamic>{
+        await channel.invokeMethod('gattGroup', <String, dynamic>{
       'request': operations.writeToBuffer(),
     });
 
@@ -164,7 +118,7 @@ class XyoBle {
     return response;
   }
 
-  static Future<GattResponse> get buzzer async {
+  Future<GattResponse> get buzzer async {
     final unlock = GattOperation();
 
     final unlockCall = GattCall();
@@ -218,7 +172,7 @@ class XyoBle {
       ..addAll([unlock, buzzer]);
 
     final Uint8List rawData =
-        await _channel.invokeMethod('gattGroup', <String, dynamic>{
+        await channel.invokeMethod('gattGroup', <String, dynamic>{
       'request': operations.writeToBuffer(),
     });
 
