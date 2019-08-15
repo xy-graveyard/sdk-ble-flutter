@@ -13,8 +13,8 @@ before_script:
   - ./flutter/bin/flutter doctor
 script:
   - cd example
-  - ./flutter/bin/flutter build apk
-  - ./flutter/bin/flutter build ios
+  - ../flutter/bin/flutter build apk --release
+  - ../flutter/bin/flutter build ios --release
 deploy:
   provider: script
   script: bash deploy.sh
