@@ -38,9 +38,8 @@ matrix:
         components:
           - tools
           - platform-tools
-          - build-tools-25.0.3
-          - android-25
-          - sys-img-armeabi-v7a-google_apis-25
+          - build-tools-28.0.3
+          - android-28
           - extra-android-m2repository
           - extra-google-m2repository
           - extra-google-android-support
@@ -59,7 +58,7 @@ matrix:
         - unzip -qq gradle-3.5-bin.zip
         - export GRADLE_HOME=$PWD/gradle-3.5
         - export PATH=$GRADLE_HOME/bin:$PATH
-        - git clone https://github.com/flutter/flutter.git -b alpha --depth 1
+        - git clone https://github.com/flutter/flutter.git --depth 1
       script:
         - cd example
         - ../flutter/bin/flutter -v build apk
@@ -71,11 +70,7 @@ matrix:
       osx_image: xcode11
       before_script:
         - pip install six
-        - brew update
-        - brew install --HEAD libimobiledevice
-        - brew install ideviceinstaller
-        - brew install ios-deploy
-        - git clone https://github.com/flutter/flutter.git -b alpha --depth 1
+        - git clone https://github.com/flutter/flutter.git --depth 1
       script:
         - cd example
         - ../flutter/bin/flutter -v build ios --no-codesign
