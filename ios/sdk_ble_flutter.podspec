@@ -3,7 +3,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'sdk_ble_flutter'
-  s.version          = '0.0.6'
+  s.version          = '0.1.0'
   s.swift_version    = '4.0'
   s.summary          = 'A new flutter plugin project.'
   s.description      = <<-DESC

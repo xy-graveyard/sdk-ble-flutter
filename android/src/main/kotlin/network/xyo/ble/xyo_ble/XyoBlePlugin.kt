@@ -100,7 +100,7 @@ class XyoBlePlugin(context: Context, registrar: Registrar): MethodCallHandler, X
 
   companion object {
       @JvmStatic fun registerWith(registrar: Registrar) {
-      val channel = MethodChannel(registrar.messenger(), "network.xyo/xyo_ble")
+      val channel = MethodChannel(registrar.messenger(), "network.xyo/sdk")
       channel.setMethodCallHandler(XyoBlePlugin(registrar.activeContext(), registrar))
     }
   }
