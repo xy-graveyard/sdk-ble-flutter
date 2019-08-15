@@ -31,6 +31,7 @@ private val alphabetIndices by lazy {
  *
  * @return the base58-encoded string
  */
+@kotlin.ExperimentalUnsignedTypes
 fun ByteArray.toBase58String(): String {
 
     val input = copyOf(size) // since we modify it in-place
@@ -69,6 +70,7 @@ fun ByteArray.toBase58String(): String {
  * @return the decoded data bytes
  * @throws NumberFormatException if the string is not a valid base58 string
  */
+@kotlin.ExperimentalUnsignedTypes
 @Throws(NumberFormatException::class)
 fun String.fromBase58(): ByteArray {
     if (isEmpty()) {
@@ -119,6 +121,7 @@ fun String.fromBase58(): ByteArray {
  * @param divisor    the number to divide by (up to 256)
  * @return the remainder of the division operation
  */
+@kotlin.ExperimentalUnsignedTypes
 private fun divmod(number: ByteArray, firstDigit: UInt, base: UInt, divisor: UInt): UInt {
     // this is just long division which accounts for the base of the input digits
     var remainder = 0.toUInt()

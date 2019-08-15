@@ -1,0 +1,70 @@
+PODS:
+  - Flutter (1.0.0)
+  - PromisesObjC (1.2.8)
+  - PromisesSwift (1.2.8):
+    - PromisesObjC (= 1.2.8)
+  - sdk-bletcpbridge-swift (0.1.2-beta.0):
+    - PromisesSwift (~> 1.2.4)
+    - sdk-core-swift (~> 0.1.4-beta.6)
+    - sdk-objectmodel-swift (~> 0.1.2-beta.3)
+    - sdk-xyobleinterface-swift (~> 0.1.4-beta.4)
+    - XyBleSdk (~> 0.0.1)
+  - sdk-core-swift (0.1.6-beta.8):
+    - sdk-objectmodel-swift (~> 0.1.2-beta.3)
+    - secp256k1.swift
+  - sdk-objectmodel-swift (0.1.3-beta.1)
+  - sdk-xyobleinterface-swift (0.1.5-beta.3):
+    - PromisesSwift (~> 1.2.4)
+    - sdk-core-swift (~> 0.1.5-beta.2)
+    - sdk-objectmodel-swift (~> 0.1.2-beta.3)
+    - XyBleSdk (~> 0.0.1)
+  - sdk_ble_flutter (0.0.4):
+    - Flutter
+    - sdk-bletcpbridge-swift (~> 0.1.2-beta.0)
+    - sdk-core-swift (~> 0.1.6-beta.8)
+    - sdk-xyobleinterface-swift (~> 0.1.5-beta.3)
+    - SwiftProtobuf (~> 1.5)
+    - XyBleSdk (~> 0.0.2)
+  - secp256k1.swift (0.1.4)
+  - SwiftProtobuf (1.6.0)
+  - XyBleSdk (0.0.2):
+    - PromisesSwift (~> 1.2.4)
+
+DEPENDENCIES:
+  - Flutter (from `.symlinks/flutter/ios-release`)
+  - sdk_ble_flutter (from `.symlinks/plugins/sdk_ble_flutter/ios`)
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - PromisesObjC
+    - PromisesSwift
+    - sdk-bletcpbridge-swift
+    - sdk-core-swift
+    - sdk-objectmodel-swift
+    - sdk-xyobleinterface-swift
+    - secp256k1.swift
+    - SwiftProtobuf
+    - XyBleSdk
+
+EXTERNAL SOURCES:
+  Flutter:
+    :path: ".symlinks/flutter/ios-release"
+  sdk_ble_flutter:
+    :path: ".symlinks/plugins/sdk_ble_flutter/ios"
+
+SPEC CHECKSUMS:
+  Flutter: 58dd7d1b27887414a370fcccb9e645c08ffd7a6a
+  PromisesObjC: c119f3cd559f50b7ae681fa59dc1acd19173b7e6
+  PromisesSwift: 37bad6f4daddb02f7c9c531efe91e8b21c13ee2f
+  sdk-bletcpbridge-swift: d017726d1246fc1f1fb78d6aa897bf9c4fabc20f
+  sdk-core-swift: 29d5d28c8b9f83d1d6934b202aeafa93f2e4f37a
+  sdk-objectmodel-swift: 58298ea43b2ce0649cc8ebc086392c3b175a8425
+  sdk-xyobleinterface-swift: 4002be13cb3d38f88441e41a27449b3d3a785d38
+  sdk_ble_flutter: 3486f97db0711b84cb06de46630a2ff448244f1f
+  secp256k1.swift: a7e7a214f6db6ce5db32cc6b2b45e5c4dd633634
+  SwiftProtobuf: e905ca1366405696411aaf174411c4b19c0ef73d
+  XyBleSdk: 7305692e4b76e116834f2f98f3cf6b9296cfed9d
+
+PODFILE CHECKSUM: c630c2cdcc6884d27c3b53646d7fe4c5b48758df
+
+COCOAPODS: 1.7.5

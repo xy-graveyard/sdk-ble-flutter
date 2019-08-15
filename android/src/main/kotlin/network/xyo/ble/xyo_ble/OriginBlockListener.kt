@@ -4,6 +4,7 @@ import network.xyo.sdkcorekotlin.boundWitness.XyoBoundWitness
 import java.time.LocalDateTime
 import java.util.*
 
+@kotlin.ExperimentalUnsignedTypes
 interface XYOriginBlockListenerDelegate {
     fun updated(blocks: Array<InteractionModel>, lastBoundWitnessTime: String)
 }

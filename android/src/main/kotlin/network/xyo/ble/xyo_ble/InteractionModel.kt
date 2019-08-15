@@ -1,6 +1,7 @@
 package network.xyo.ble.xyo_ble
 
 import kotlinx.coroutines.runBlocking
+import network.xyo.ble.flutter.protobuf.BoundWitness
 import network.xyo.sdkcorekotlin.boundWitness.XyoBoundWitness
 import network.xyo.sdkcorekotlin.repositories.XyoOriginBlockRepository
 import network.xyo.sdkcorekotlin.schemas.XyoSchemas
@@ -10,6 +11,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.LinkedHashMap
 
+@kotlin.ExperimentalUnsignedTypes
 class InteractionModel {
     private var byteHash = ByteArray(0)
     private var boundWitness: XyoBoundWitness? = null
@@ -123,7 +125,7 @@ class InteractionModel {
         val huerestics: Map<String, String> = getHuerestics().toMap()
         val parties: Array<String> = parties()
         val linked = this.linked // not sure what this is
-        val unknownFields: ByteArray = byteArrayOf() // not sure what this is
+        //val unknownFields: ByteArray = byteArrayOf() // not sure what this is
 
         val builder = BoundWitness.DeviceBoundWitness.newBuilder()
         builder.bytes = bytes

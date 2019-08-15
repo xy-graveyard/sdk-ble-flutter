@@ -1,5 +1,7 @@
 syntax = "proto3";
 
+option java_package = "network.xyo.ble.flutter.protobuf";
+
 /**
     Supplies the messages for sending a request for a gatt call and the associated response
 **/
