@@ -41,7 +41,7 @@ matrix:
         - export PATH=$GRADLE_HOME/bin:$PATH
         - git clone https://github.com/flutter/flutter.git --depth 1
       script:
-        - cd example
+        - cd $TRAVIS_BUILD_DIR/example
         - $TRAVIS_BUILD_DIR/flutter/bin/flutter -v build apk
 
     # Builds an IPA.
@@ -53,10 +53,10 @@ matrix:
         - pip install six
         - git clone https://github.com/flutter/flutter.git --depth 1
       script:
-        - cd example
+        - cd $TRAVIS_BUILD_DIR/example
         - $TRAVIS_BUILD_DIR/flutter/bin/flutter -v build ios --no-codesign
       deploy:
         provider: script
-        script: bash deploy.sh
+        script: cd $TRAVIS_BUILD_DIR && bash $TRAVIS_BUILD_DIR/deploy.sh
         on:
           branch: master
