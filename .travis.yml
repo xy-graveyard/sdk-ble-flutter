@@ -8,6 +8,9 @@ matrix:
     - env: JOB=APK
       os: linux
       language: android
+      cache:
+        directories:
+          - $TRAVIS_BUILD_DIR/example/android/.gradle
       licenses:
         - 'android-sdk-preview-license-.+'
         - 'android-sdk-license-.+'
@@ -39,21 +42,19 @@ matrix:
         - git clone https://github.com/flutter/flutter.git --depth 1
       script:
         - cd example
-        - ../flutter/bin/flutter -v build apk
+        - $TRAVIS_BUILD_DIR/flutter/bin/flutter -v build apk
 
     # Builds an IPA.
     - env: JOB=IPA
       os: osx
       language: objective-c
-      cache: cocoapods
-      podfile: example/ios/Podfile
       osx_image: xcode11
       before_script:
         - pip install six
         - git clone https://github.com/flutter/flutter.git --depth 1
       script:
         - cd example
-        - ../flutter/bin/flutter -v build ios --no-codesign
+        - $TRAVIS_BUILD_DIR/flutter/bin/flutter -v build ios --no-codesign
       deploy:
         provider: script
         script: bash deploy.sh
