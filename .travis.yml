@@ -68,7 +68,7 @@ matrix:
     - env: JOB=IPA
       os: osx
       language: generic
-      osx_image: xcode8.3
+      osx_image: xcode11
       before_script:
         - pip install six
         - brew update
