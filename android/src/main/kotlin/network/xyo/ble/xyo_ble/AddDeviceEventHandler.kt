@@ -7,6 +7,7 @@ import io.flutter.plugin.common.EventChannel
 import network.xyo.ble.devices.XY4BluetoothDevice
 import network.xyo.ble.devices.XYFinderBluetoothDevice
 import network.xyo.ble.devices.XYIBeaconBluetoothDevice
+import network.xyo.ble.flutter.protobuf.Device
 
 class AddDeviceEventHandler : EventChannel.StreamHandler {
 

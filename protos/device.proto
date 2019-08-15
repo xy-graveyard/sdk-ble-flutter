@@ -1,5 +1,7 @@
 syntax = "proto3";
 
+option java_package = "network.xyo.ble.flutter.protobuf";
+
 /**
     Represents an XYBluetoothDevice
 **/
