@@ -1,6 +1,5 @@
-name: xyo_sdk_flutter_example
-description: Example Project of how to use SDK.
-publish_to: 'none'
+name: example
+description: A new Flutter project.
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -21,33 +20,13 @@ dependencies:
   flutter:
     sdk: flutter
 
+  # The following adds the Cupertino Icons font to your application.
+  # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
-  font_awesome_flutter:
-  firebase_auth: ^0.11.1+6
-  graphql_flutter: ^1.0.1
-  provider: ^3.0.0+1
-  json_annotation: ^2.4.0
-  http: ^0.12.0+2
-  shared_preferences: ^0.5.3+1
-  intl: ^0.15.8
-  charts_flutter: ^0.6.0
-  convert:
-  connectivity: ^0.4.3+2
-  google_maps_flutter: ^0.5.19+2
-  equatable: ^0.3.0
-  bloc: ^0.14.0
-  flutter_bloc: ^0.20.0
-  flutter_crashlytics: ^1.0.0
-  permission_handler: ^3.2.1
-  sdk_ble_flutter:
-    path: ../
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
-  build_runner: ^1.0.0
-  json_serializable: ^3.0.0
 
 
 # For information on the generic Dart part of this file, see the

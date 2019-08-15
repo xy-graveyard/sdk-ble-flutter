@@ -14,11 +14,6 @@ before_script:
 script:
   - ./flutter/bin/flutter test
   - ls $HOME/.pub-cache
-deploy:
-  provider: script
-  script: bash deploy.sh
-  on:
-    branch: master
 cache:
   directories:
     - $HOME/.pub-cache

@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'XYO SDK Example'),
+      home: MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }
