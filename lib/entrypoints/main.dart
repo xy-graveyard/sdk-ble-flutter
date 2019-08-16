@@ -83,13 +83,18 @@ class XyoSdk {
   }
 
   // Get blockCount
-  static Future<String> getBlockCount() async {
+  static Future<int> getBlockCount() async {
     return await _channel.invokeMethod('getBlockCount');
   }
 
   // Get block by Index
   static Future<String> getBlockByIndex() async {
     return await _channel.invokeMethod('getBlockByIndex');
+  }
+
+  // Self Sign a Block
+  static Future<String> selfsign() async {
+    return await _channel.invokeMethod('selfsign');
   }
 
 }
