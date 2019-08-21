@@ -8,10 +8,7 @@ import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry.Registrar
-import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.*
 import network.xyo.ble.devices.XY4BluetoothDevice
 import network.xyo.ble.devices.XYBluetoothDevice
 import network.xyo.ble.devices.XYIBeaconBluetoothDevice
@@ -26,6 +23,7 @@ import network.xyo.modbluetoothkotlin.client.XyoSentinelX
 import network.xyo.modbluetoothkotlin.server.XyoBluetoothServer
 import network.xyo.sdkcorekotlin.boundWitness.XyoBoundWitness
 import network.xyo.sdkcorekotlin.node.XyoNodeListener
+import network.xyo.sdkobjectmodelkotlin.structure.XyoObjectStructure
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -148,6 +146,14 @@ class XyoBlePlugin(context: Context, registrar: Registrar): MethodCallHandler, X
         ui {
           result.success(this@XyoBlePlugin.bridgeManager.getPrimaryPublicKeyAsString())
         }
+      } else if (call.method == "selfsign") {
+        ui {
+          result.success(this@XyoBlePlugin.selfsign())
+        }
+      } else if (call.method == "getBlockCount") {
+        ui {
+          result.success(this@XyoBlePlugin.getBlockCount().await())
+        }
       } else {
         ui {
           result.notImplemented()
@@ -197,21 +203,45 @@ class XyoBlePlugin(context: Context, registrar: Registrar): MethodCallHandler, X
     return false
   }
 
+  fun selfsign(): Boolean {
+    GlobalScope.launch {
+      notifyNewBoundWitness();
+    };
+    return true;
+  }
+
+  fun getBlockCount(): Deferred<Int> {
+    return GlobalScope.async {
+      val hashes = bridgeManager.bridge.blockRepository.getAllOriginBlockHashes().await() ?: return@async -1
+      val models = hashesToBoundWitnesses(hashes)
+
+      return@async models.count();
+    }
+  }
+
+  fun hashesToBoundWitnesses(hashes: Iterator<XyoObjectStructure>): ArrayList<BoundWitness.DeviceBoundWitness> {
+    val models = ArrayList<BoundWitness.DeviceBoundWitness>()
+
+    for (hash in hashes) {
+      val model = InteractionModel(bridgeManager.bridge.blockRepository, hash.bytesCopy, Date(), true)
+      models.add(model.toBuffer())
+    }
+
+    return models
+  }
+
+  fun notifyNewBoundWitness() {
+    GlobalScope.launch {
+      val hashes = bridgeManager.bridge.blockRepository.getAllOriginBlockHashes().await() ?: return@launch
+      val models = hashesToBoundWitnesses(hashes)
+
+      boundWitnessStreamHandler.sendMessage(models.toTypedArray())
+   }
+  }
 
   private val onBoundWitness = object : XyoNodeListener() {
     override fun onBoundWitnessEndSuccess(boundWitness: XyoBoundWitness) {
-     GlobalScope.launch {
-        val hashes = bridgeManager.bridge.blockRepository.getAllOriginBlockHashes().await() ?: return@launch
-        val models = ArrayList<BoundWitness.DeviceBoundWitness>()
-
-        for (hash in hashes) {
-          val model = InteractionModel(bridgeManager.bridge.blockRepository, hash.bytesCopy, Date(), true)
-          models.add(model.toBuffer())
-        }
-
-        boundWitnessStreamHandler.sendMessage(models.toTypedArray())
-
-     }
+      notifyNewBoundWitness();
     }
   }
 
