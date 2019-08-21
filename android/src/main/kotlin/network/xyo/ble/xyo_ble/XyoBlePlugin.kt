@@ -154,6 +154,22 @@ class XyoBlePlugin(context: Context, registrar: Registrar): MethodCallHandler, X
         ui {
           result.success(this@XyoBlePlugin.getBlockCount().await())
         }
+      } else if (call.method == "startScanner") {
+        ui {
+          result.success(true)
+        }
+      } else if (call.method == "stopScanner") {
+        ui {
+          result.success(true)
+        }
+      } else if (call.method == "startServer") {
+        ui {
+          result.success(true)
+        }
+      } else if (call.method == "stopServer") {
+        ui {
+          result.success(true)
+        }
       } else {
         ui {
           result.notImplemented()
