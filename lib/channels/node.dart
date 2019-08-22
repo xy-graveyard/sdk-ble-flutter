@@ -7,17 +7,17 @@ class XyoNodeChannel extends MethodChannel {
   XyoNodeChannel(String name) : events = EventChannel(name), super(name);
 
   // Get the device public key
-  Future<String> getDevicePublicKey() async {
+  Future<String> get publicKey async {
     return await invokeMethod<String>('getPublicKey');
   }
 
   // Get blockCount
-  Future<int> getBlockCount() async {
+  Future<int> get blockCount async {
     return await invokeMethod('getBlockCount');
   }
 
   // Get block by Index
-  Future<String> getBlockByIndex() async {
+  Future<String> get blockByIndex async {
     return await invokeMethod('getBlockByIndex');
   }
 }

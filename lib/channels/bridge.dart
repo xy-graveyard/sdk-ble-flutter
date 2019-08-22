@@ -1,7 +1,8 @@
 import 'package:flutter/services.dart';
+import 'package:sdk_ble_flutter/channels/node.dart';
 import 'package:sdk_ble_flutter/classes/archivist.dart';
 
-class XyoBridgeChannel extends MethodChannel {
+class XyoBridgeChannel extends XyoNodeChannel {
 
   final EventChannel events;
 

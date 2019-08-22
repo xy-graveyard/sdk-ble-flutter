@@ -1,6 +1,7 @@
 import 'package:flutter/services.dart';
+import 'package:sdk_ble_flutter/channels/node.dart';
 
-class XyoSentinelChannel extends MethodChannel {
+class XyoSentinelChannel extends XyoNodeChannel {
 
   final EventChannel events;
 

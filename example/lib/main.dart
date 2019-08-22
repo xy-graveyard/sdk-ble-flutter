@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sdk_ble_flutter/main.dart';
 
 void main() => runApp(MyApp());
 
@@ -26,26 +27,40 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  var message = "";
 
   Future<bool> _startSentinel() async {
-    return true;
+    final result = await XyoSdk.sentinel.start();
+    message = result.toString();
+    return result;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body:Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            MaterialButton(
-              child: Text("Start Sentinel"),
-              onPressed: _startSentinel,
-            )
-          ],
+        appBar: AppBar(
+          title: Text(widget.title),
         ),
-    );
+        body: Padding(
+          padding: EdgeInsets.all(5),
+          child: ListView(
+            children: <Widget>[
+              Padding(
+                padding: EdgeInsets.all(5),
+                child: Container(
+                  height: 100,
+                  child: Text(message),
+                ),
+              ),
+              MaterialButton(
+                child: Text("Start Sentinel"),
+                color: Colors.blue,
+                textColor: Colors.white,
+                padding: EdgeInsets.all(5),
+                onPressed: _startSentinel,
+              )
+            ],
+          ),
+        ));
   }
 }
