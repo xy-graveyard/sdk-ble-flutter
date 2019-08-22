@@ -1,6 +1,6 @@
 name: sdk_ble_flutter
 description: XYO Flutter SDK PLugIn.
-version: 0.1.0
+version: 0.1.1
 author: Arie Trouw <arie.trouw@xyo.network>
 homepage: https://github.com/XYOracleNetwork/sdk-ble-flutter
 
