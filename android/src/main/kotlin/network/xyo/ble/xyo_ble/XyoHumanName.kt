@@ -58,9 +58,9 @@ class XyoHumanName {
             return 0
         }
 
-        private fun getIndexForParty (boundWitness: XyoBoundWitness, index: Int): UInt
+        private fun getIndexForParty (boundWitness: XyoBoundWitness, fetterIndex: Int): UInt
         {
-            val fetter = boundWitness.getFetterOfParty(index) ?: throw Error()
+            val fetter = boundWitness.getFetterOfParty(fetterIndex) ?: throw Error()
 
             val index = fetter.get(XyoSchemas.INDEX.id).first()
 

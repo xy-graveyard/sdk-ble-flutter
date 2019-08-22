@@ -10,11 +10,20 @@ export 'package:sdk_ble_flutter/protos/device.pb.dart';
 
 export 'package:sdk_ble_flutter/protos/bound_witness.pb.dart';
 
-class XyoDevice {
+class XyoDeviceChannel extends MethodChannel {
 
-  MethodChannel channel;
+  final EventChannel events;
+  XyoDeviceChannel(String name): events = EventChannel(name), super(name);
 
-  XyoDevice(this.channel);
+  // Start listening for button presses on devices
+  Future<bool> startAddDevice() async {
+    return await invokeMethod<bool>('startListening');
+  }
+
+  // Stop listening for button presses on devices
+  Future<bool> stopAddDevice() async {
+    return await invokeMethod<bool>('stopListening');
+  }
 
   /// Run one defined operation on a single device
   Future<GattResponse> defined(
@@ -24,7 +33,7 @@ class XyoDevice {
     gattOp.deviceId = device.id;
 
     final Uint8List rawData =
-        await channel.invokeMethod('gattSingle', <String, dynamic>{
+        await invokeMethod('gattSingle', <String, dynamic>{
       'request': gattOp.writeToBuffer(),
     });
 
@@ -48,7 +57,7 @@ class XyoDevice {
     gattOp.gattCall = gattCall;
 
     final Uint8List rawData =
-        await channel.invokeMethod('gattSingle', <String, dynamic>{
+        await invokeMethod('gattSingle', <String, dynamic>{
       'request': gattOp.writeToBuffer(),
     });
 
@@ -74,7 +83,7 @@ class XyoDevice {
     operations.disconnectOnCompletion = true;
 
     final Uint8List rawData =
-        await channel.invokeMethod('gattList', <String, dynamic>{
+        await invokeMethod('gattList', <String, dynamic>{
       'request': operations.writeToBuffer(),
     });
 
@@ -89,7 +98,7 @@ class XyoDevice {
         'xy:ibeacon:a44eacf4-0104-0000-0000-5f784c9977b5.69.17896';
 
     final Uint8List rawData =
-        await channel.invokeMethod('gattSingle', <String, dynamic>{
+        await invokeMethod('gattSingle', <String, dynamic>{
       'request': buzzer.writeToBuffer(),
     });
 
@@ -110,7 +119,7 @@ class XyoDevice {
     operations.disconnectOnCompletion = true;
 
     final Uint8List rawData =
-        await channel.invokeMethod('gattGroup', <String, dynamic>{
+        await invokeMethod('gattGroup', <String, dynamic>{
       'request': operations.writeToBuffer(),
     });
 
@@ -172,7 +181,7 @@ class XyoDevice {
       ..addAll([unlock, buzzer]);
 
     final Uint8List rawData =
-        await channel.invokeMethod('gattGroup', <String, dynamic>{
+        await invokeMethod('gattGroup', <String, dynamic>{
       'request': operations.writeToBuffer(),
     });
 
