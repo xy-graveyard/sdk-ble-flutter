@@ -39,7 +39,7 @@ class XyoBridgeChannel(context: Context, registrar: PluginRegistry.Registrar, na
   init {
     GlobalScope.launch {
       bridgeManager.restoreAndInitBridge().await()
-      bridgeManager.bridge.addListener("flutter_entry", onBoundWitness)
+      bridgeManager.bridge.addListener("bridge", onBoundWitness)
     }
 
     XYIBeaconBluetoothDevice.enable(true)
@@ -59,7 +59,7 @@ class XyoBridgeChannel(context: Context, registrar: PluginRegistry.Registrar, na
   }
 
   override fun onStartAsync() = GlobalScope.async {
-    smartScan.addListener("flutter_entry_scan", bridgeManager.bridge.scanCallback)
+    smartScan.addListener("bridge", bridgeManager.bridge.scanCallback)
     serverHelper.listener = bridgeManager.bridge.serverCallback
     server.startServer()
     if (smartScan.start().await()){
@@ -70,7 +70,7 @@ class XyoBridgeChannel(context: Context, registrar: PluginRegistry.Registrar, na
   }
 
   override fun onStopAsync() = GlobalScope.async {
-    smartScan.removeListener("flutter_entry_scan")
+    smartScan.removeListener("bridge")
     serverHelper.listener = null
     server.stopServer()
     if (smartScan.stop().await()){
