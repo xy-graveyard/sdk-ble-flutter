@@ -23,14 +23,6 @@ class SentinelSection extends StatelessWidget {
     }
   }
 
-  Future<void> _selfSign() async {
-    try {
-      _setMessage(await XyoSdk.sentinel.selfsign());
-    } catch (ex) {
-      _setMessage(ex.message);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -51,14 +43,6 @@ class SentinelSection extends StatelessWidget {
               textColor: Colors.white,
               padding: EdgeInsets.all(5),
               onPressed: _stop,
-            ),
-            Text(" "), //just for space
-            MaterialButton(
-              child: Text("Self Sign"),
-              color: Colors.blue,
-              textColor: Colors.white,
-              padding: EdgeInsets.all(5),
-              onPressed: _selfSign,
             ),
           ],
         ),

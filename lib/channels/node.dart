@@ -1,4 +1,5 @@
 import 'package:flutter/services.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:sdk_ble_flutter/protos/bound_witness.pb.dart';
 
 class XyoNodeChannel extends MethodChannel {
@@ -6,6 +7,23 @@ class XyoNodeChannel extends MethodChannel {
   final EventChannel events;
 
   XyoNodeChannel(String name) : events = EventChannel(name), super(name);
+
+  Future<String> start() async {
+    Map<PermissionGroup, PermissionStatus> permissions = await PermissionHandler().requestPermissions([PermissionGroup.locationAlways]);
+    if (permissions[PermissionGroup.locationAlways] == PermissionStatus.granted) {
+      return await invokeMethod('start');
+    } else {
+      return "";
+    }
+  }
+
+  Future<String> stop() async {
+    return await invokeMethod('stop');
+  }
+
+  Future<String> get status async {
+    return await invokeMethod('getStatus');
+  }
 
   // Get the device public key
   Future<String> get publicKey async {

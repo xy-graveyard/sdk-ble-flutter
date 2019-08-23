@@ -4,7 +4,9 @@ import android.content.Context
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.PluginRegistry
+import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import network.xyo.ble.devices.XY4BluetoothDevice
 import network.xyo.ble.devices.XYIBeaconBluetoothDevice
@@ -14,9 +16,11 @@ import network.xyo.ble.scanner.XYSmartScanModern
 import network.xyo.ble.xyo_ble.InteractionModel
 import network.xyo.modbluetoothkotlin.client.XyoBluetoothClient
 import network.xyo.modbluetoothkotlin.client.XyoSentinelX
+import network.xyo.modbluetoothkotlin.node.XyoBleNode
 import network.xyo.modbluetoothkotlin.server.XyoBluetoothServer
 import network.xyo.sdkcorekotlin.boundWitness.XyoBoundWitness
 import network.xyo.sdkcorekotlin.node.XyoNodeListener
+import network.xyo.sdkobjectmodelkotlin.structure.XyoIterableStructure
 import network.xyo.sdkobjectmodelkotlin.structure.XyoObjectStructure
 import java.io.PrintWriter
 import java.io.StringWriter
@@ -46,30 +50,45 @@ class XyoBridgeChannel(context: Context, registrar: PluginRegistry.Registrar, na
 
   override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
       when (call.method) {
-        "start" -> start(call, result)
-        "stop" -> stop(call, result)
         "setArchivists" -> setArchivists(call, result)
         "getBlockCount" -> getBlockCount(call, result)
         "getLastBlock" -> getLastBlock(call, result)
+        "selfSign" -> selfSign(call, result)
         else -> super.onMethodCall(call, result)
       }
   }
 
-  private fun start(call: MethodCall, result: MethodChannel.Result) = GlobalScope.launch {
+  override fun onStartAsync() = GlobalScope.async {
     smartScan.addListener("flutter_entry_scan", bridgeManager.bridge.scanCallback)
     serverHelper.listener = bridgeManager.bridge.serverCallback
-    sendResult(result, smartScan.start().await() && server.startServer())
+    server.startServer()
+    if (smartScan.start().await()){
+      return@async STATUS_STARTED
+    } else {
+      return@async STATUS_STOPPED
+    }
   }
 
-  private fun stop(call: MethodCall, result: MethodChannel.Result) = GlobalScope.launch {
+  override fun onStopAsync() = GlobalScope.async {
     smartScan.removeListener("flutter_entry_scan")
     serverHelper.listener = null
     server.stopServer()
-    sendResult(result, smartScan.stop().await())
+    if (smartScan.stop().await()){
+      return@async STATUS_STOPPED
+    } else {
+      return@async STATUS_STARTED
+    }
   }
 
   private fun setArchivists(call: MethodCall, result: MethodChannel.Result) = GlobalScope.launch {
     notImplemented(result)
+  }
+
+  private fun selfSign(call: MethodCall, result: MethodChannel.Result) = GlobalScope.launch {
+    bridgeManager.bridge.selfSignOriginChain().await()
+
+    //now that we have a new last block
+    getLastBlock(call, result)
   }
 
   private fun getBlockCount(call: MethodCall, result: MethodChannel.Result) = GlobalScope.launch {
@@ -79,17 +98,19 @@ class XyoBridgeChannel(context: Context, registrar: PluginRegistry.Registrar, na
       sendResult(result, models.count())
   }
 
-  private fun getLastBlock(call: MethodCall, result: MethodChannel.Result) = GlobalScope.launch {
-      val hashes = bridgeManager.bridge.blockRepository.getAllOriginBlockHashes().await() ?: return@launch sendError(result, "FAILED")
-      val models = hashesToBoundWitnesses(hashes)
-      val count = models.count()
+  private fun getLastBlockData() = GlobalScope.async {
+    val hash = bridgeManager.bridge.originState.previousHash ?: return@async null
+    val structure = XyoIterableStructure(hash.bytesCopy, 0)
 
-      if (count > 0) {
-        var lastModel = models[count - 1]
-        sendResult(result, lastModel.toByteArray())
-      } else {
-        sendResult(result, null)
-      }
+    val hashArray = arrayOf(structure[0])
+    val hashArrayIterator = hashArray.iterator()
+    val boundWitnesses = hashesToBoundWitnesses(hashArrayIterator)
+    return@async boundWitnesses[0]
+  }
+
+  private fun getLastBlock(call: MethodCall, result: MethodChannel.Result) = GlobalScope.launch {
+    val lastModel: BoundWitness.DeviceBoundWitness? = getLastBlockData().await()
+    sendResult(result, lastModel?.toByteArray())
   }
 
   private fun hashesToBoundWitnesses(hashes: Iterator<XyoObjectStructure>): ArrayList<BoundWitness.DeviceBoundWitness> {
@@ -115,7 +136,7 @@ class XyoBridgeChannel(context: Context, registrar: PluginRegistry.Registrar, na
 
   private val onBoundWitness = object : XyoNodeListener() {
     override fun onBoundWitnessEndSuccess(boundWitness: XyoBoundWitness) {
-      notifyNewBoundWitness();
+      notifyNewBoundWitness()
     }
   }
 }

@@ -31,6 +31,14 @@ class BridgeSection extends StatelessWidget {
     }
   }
 
+  Future<void> _selfSign() async {
+    try {
+      _setMessage(await XyoSdk.bridge.selfSign());
+    } catch (ex) {
+      _setMessage(ex.message);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -54,12 +62,20 @@ class BridgeSection extends StatelessWidget {
             ),
             Text(" "), //just for space
             MaterialButton(
-              child: Text("Set Archivists"),
+              child: Text("Archivists"),
               color: Colors.blue,
               textColor: Colors.white,
               padding: EdgeInsets.all(5),
               onPressed: _setArchivists,
-            )
+            ),
+            Text(" "), //just for space
+            MaterialButton(
+              child: Text("Sign"),
+              color: Colors.blue,
+              textColor: Colors.white,
+              padding: EdgeInsets.all(5),
+              onPressed: _selfSign,
+            ),
           ],
         ),
         NodeSection(_setMessage, XyoSdk.bridge),

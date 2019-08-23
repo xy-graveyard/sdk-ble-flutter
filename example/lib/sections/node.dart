@@ -28,7 +28,7 @@ class NodeSection extends StatelessWidget {
       final block = await _node.lastBlock;
       _setMessage(block.writeToJson());
     } catch (ex) {
-      _setMessage("Message: ${ex.message}\nDetails:${ex.details}");
+      _setMessage("Message: ${ex?.message}\nDetails:${ex?.details}");
     }
   }
 
