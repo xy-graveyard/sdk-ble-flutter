@@ -4,6 +4,8 @@ import io.flutter.plugin.common.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import network.xyo.ble.xyo_ble.ui
+import java.io.PrintWriter
+import java.io.StringWriter
 
 class EventStreamHandler: EventChannel.StreamHandler {
     private var eventSink: EventChannel.EventSink? = null
@@ -42,7 +44,13 @@ open class XyoBaseChannel(registrar: PluginRegistry.Registrar, name: String): Me
 
     protected fun sendResult(result: MethodChannel.Result, value:Any?) {
         ui {
-            result.success(value)
+            try {
+                result.success(value)
+            } catch(ex: Exception) {
+                val sw = StringWriter()
+                ex.printStackTrace(PrintWriter(sw))
+                result.error("sendResult", ex.message, sw.toString())
+            }
         }
     }
 

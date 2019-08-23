@@ -18,6 +18,10 @@ import network.xyo.modbluetoothkotlin.server.XyoBluetoothServer
 import network.xyo.sdkcorekotlin.boundWitness.XyoBoundWitness
 import network.xyo.sdkcorekotlin.node.XyoNodeListener
 import network.xyo.sdkobjectmodelkotlin.structure.XyoObjectStructure
+import java.io.PrintWriter
+import java.io.StringWriter
+import java.io.UnsupportedEncodingException
+import java.lang.Exception
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -41,13 +45,14 @@ class XyoBridgeChannel(context: Context, registrar: PluginRegistry.Registrar, na
   }
 
   override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
-    when (call.method) {
-      "start" -> start(call, result)
-      "stop" -> stop(call, result)
-      "setArchivists" -> setArchivists(call, result)
-      "getBlockCount" -> getBlockCount(call, result)
-      else -> super.onMethodCall(call, result)
-    }
+      when (call.method) {
+        "start" -> start(call, result)
+        "stop" -> stop(call, result)
+        "setArchivists" -> setArchivists(call, result)
+        "getBlockCount" -> getBlockCount(call, result)
+        "getLastBlock" -> getLastBlock(call, result)
+        else -> super.onMethodCall(call, result)
+      }
   }
 
   private fun start(call: MethodCall, result: MethodChannel.Result) = GlobalScope.launch {
@@ -72,6 +77,19 @@ class XyoBridgeChannel(context: Context, registrar: PluginRegistry.Registrar, na
       val models = hashesToBoundWitnesses(hashes)
 
       sendResult(result, models.count())
+  }
+
+  private fun getLastBlock(call: MethodCall, result: MethodChannel.Result) = GlobalScope.launch {
+      val hashes = bridgeManager.bridge.blockRepository.getAllOriginBlockHashes().await() ?: return@launch sendError(result, "FAILED")
+      val models = hashesToBoundWitnesses(hashes)
+      val count = models.count()
+
+      if (count > 0) {
+        var lastModel = models[count - 1]
+        sendResult(result, lastModel.toByteArray())
+      } else {
+        sendResult(result, null)
+      }
   }
 
   private fun hashesToBoundWitnesses(hashes: Iterator<XyoObjectStructure>): ArrayList<BoundWitness.DeviceBoundWitness> {

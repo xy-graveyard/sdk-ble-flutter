@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:sdk_ble_flutter/main.dart';
+import 'package:network.xyo.sdk.flutter.example/sections/bridge.dart';
+import 'package:network.xyo.sdk.flutter.example/sections/sentinel.dart';
 
 void main() => runApp(MyApp());
 
@@ -29,10 +30,14 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   var message = "";
 
-  Future<bool> _startSentinel() async {
-    final result = await XyoSdk.sentinel.start();
-    message = result.toString();
-    return result;
+  void _setMessage(dynamic msg) {
+    setState(() {
+      message = msg.toString();
+    });
+  }
+
+  void _clear() {
+    _setMessage("");
   }
 
   @override
@@ -45,20 +50,25 @@ class _MyHomePageState extends State<MyHomePage> {
           padding: EdgeInsets.all(5),
           child: ListView(
             children: <Widget>[
-              Padding(
-                padding: EdgeInsets.all(5),
-                child: Container(
-                  height: 100,
-                  child: Text(message),
-                ),
-              ),
               MaterialButton(
-                child: Text("Start Sentinel"),
+                child: Text("Clear"),
                 color: Colors.blue,
                 textColor: Colors.white,
                 padding: EdgeInsets.all(5),
-                onPressed: _startSentinel,
-              )
+                onPressed: _clear,
+              ),
+              Divider(),
+              Padding(
+                padding: EdgeInsets.all(5),
+                child: Container(
+                  child: Text(message),
+                ),
+              ),
+              Divider(),
+              Text("Sentinel"),
+              SentinelSection(_setMessage),
+              Text("Bridge"),
+              BridgeSection(_setMessage),
             ],
           ),
         ));

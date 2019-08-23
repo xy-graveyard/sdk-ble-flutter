@@ -1,4 +1,5 @@
 import 'package:flutter/services.dart';
+import 'package:sdk_ble_flutter/protos/bound_witness.pb.dart';
 
 class XyoNodeChannel extends MethodChannel {
 
@@ -13,11 +14,11 @@ class XyoNodeChannel extends MethodChannel {
 
   // Get blockCount
   Future<int> get blockCount async {
-    return await invokeMethod('getBlockCount');
+    return await invokeMethod<int>('getBlockCount');
   }
 
   // Get block by Index
-  Future<String> get blockByIndex async {
-    return await invokeMethod('getBlockByIndex');
+  Future<DeviceBoundWitness> get lastBlock async {
+    return DeviceBoundWitness.fromBuffer(await invokeMethod('getLastBlock'));
   }
 }

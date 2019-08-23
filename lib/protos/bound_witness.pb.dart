@@ -1,10 +1,11 @@
 ///
 //  Generated code. Do not modify.
 //  source: protos/bound_witness.proto
-///
-// ignore_for_file: camel_case_types,non_constant_identifier_names,library_prefixes,unused_import,unused_shown_name
+//
+// @dart = 2.3
+// ignore_for_file: camel_case_types,non_constant_identifier_names,library_prefixes,unused_import,unused_shown_name,return_of_invalid_type
 
-import 'dart:core' as $core show bool, Deprecated, double, int, List, Map, override, String;
+import 'dart:core' as $core show bool, Deprecated, double, int, List, Map, override, pragma, String;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
@@ -14,13 +15,15 @@ class DeviceBoundWitnessList extends $pb.GeneratedMessage {
     ..hasRequiredFields = false
   ;
 
-  DeviceBoundWitnessList() : super();
-  DeviceBoundWitnessList.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) : super.fromBuffer(i, r);
-  DeviceBoundWitnessList.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) : super.fromJson(i, r);
+  DeviceBoundWitnessList._() : super();
+  factory DeviceBoundWitnessList() => create();
+  factory DeviceBoundWitnessList.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory DeviceBoundWitnessList.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   DeviceBoundWitnessList clone() => DeviceBoundWitnessList()..mergeFromMessage(this);
   DeviceBoundWitnessList copyWith(void Function(DeviceBoundWitnessList) updates) => super.copyWith((message) => updates(message as DeviceBoundWitnessList));
   $pb.BuilderInfo get info_ => _i;
-  static DeviceBoundWitnessList create() => DeviceBoundWitnessList();
+  @$core.pragma('dart2js:noInline')
+  static DeviceBoundWitnessList create() => DeviceBoundWitnessList._();
   DeviceBoundWitnessList createEmptyInstance() => create();
   static $pb.PbList<DeviceBoundWitnessList> createRepeated() => $pb.PbList<DeviceBoundWitnessList>();
   static DeviceBoundWitnessList getDefault() => _defaultInstance ??= create()..freeze();
@@ -40,13 +43,15 @@ class DeviceBoundWitness extends $pb.GeneratedMessage {
     ..hasRequiredFields = false
   ;
 
-  DeviceBoundWitness() : super();
-  DeviceBoundWitness.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) : super.fromBuffer(i, r);
-  DeviceBoundWitness.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) : super.fromJson(i, r);
+  DeviceBoundWitness._() : super();
+  factory DeviceBoundWitness() => create();
+  factory DeviceBoundWitness.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory DeviceBoundWitness.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   DeviceBoundWitness clone() => DeviceBoundWitness()..mergeFromMessage(this);
   DeviceBoundWitness copyWith(void Function(DeviceBoundWitness) updates) => super.copyWith((message) => updates(message as DeviceBoundWitness));
   $pb.BuilderInfo get info_ => _i;
-  static DeviceBoundWitness create() => DeviceBoundWitness();
+  @$core.pragma('dart2js:noInline')
+  static DeviceBoundWitness create() => DeviceBoundWitness._();
   DeviceBoundWitness createEmptyInstance() => create();
   static $pb.PbList<DeviceBoundWitness> createRepeated() => $pb.PbList<DeviceBoundWitness>();
   static DeviceBoundWitness getDefault() => _defaultInstance ??= create()..freeze();
