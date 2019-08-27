@@ -8,7 +8,6 @@ class XyoNodeChannel: XyoBaseChannel {
     static var STATUS_STARTED = "started"
     static var STATUS_STOPPED = "stopped"
 
-    var bridgeManager = BridgeManager.instance
     var status = STATUS_STOPPED
 
   override func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
@@ -46,16 +45,17 @@ class XyoNodeChannel: XyoBaseChannel {
   }
 
   private func start(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-    status = onStartAsync()
+    status = onStart()
     result(status)
   }
 
   private func stop(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-    status = onStopAsync()
+    status = onStop()
     result(status)
   }
 
   private func getPublicKey(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-    result(bridgeManager.getPrimaryPublicKey())
+    let pk = BridgeManager.instance.primaryPublicKeyAsString
+    result(pk)
   }
 }

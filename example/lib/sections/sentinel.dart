@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:network.xyo.sdk.flutter.example/sections/node.dart';
 import 'package:sdk_ble_flutter/main.dart';
+
+import 'node.dart';
 
 class SentinelSection extends StatelessWidget {
   final Function(dynamic) _setMessage;

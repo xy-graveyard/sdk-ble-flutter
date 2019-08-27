@@ -1,103 +1,119 @@
+import sdk_core_swift
+import sdk_bletcpbridge_swift
+import sdk_objectmodel_swift
+
 class XyoBridgeChannel: XyoNodeChannel {
     
     override
     init(registrar: FlutterPluginRegistrar, name: String) {
         super.init(registrar: registrar, name: name)
-        bridgeManager = BridgeManager.instance
+        BridgeManager.instance.restoreAndInitBridge()
         XYBluetoothManager.setup()
     }
 
   override func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+    do {
       switch (call.method) {
       case "setArchivists":
-        setArchivists(call, result)
+        setArchivists(call, result: result)
         break
       case "getBlockCount":
-        getBlockCount(call, result)
+        try getBlockCount(call, result: result)
         break
       case "getLastBlock":
-        getLastBlock(call, result)
+        getLastBlock(call, result: result)
         break
       case "selfSign":
-        selfSign(call, result)
+        selfSign(call, result: result)
         break
       default:
-        super.handle(call, result:result)
+        super.handle(call, result: result)
       }
+    } catch {
+        result(FlutterError(code: "Error", message: "Unexpected Error", details:"\(error)"))
+    }
   }
 
-  override func onStart() {
+  override func onStart() -> String {
     XYBluetoothManager.start()
+    status = XyoNodeChannel.STATUS_STARTED
+    return status
   }
 
-  override func onStop() {
+  override func onStop() -> String {
     XYBluetoothManager.stop()
+    status = XyoNodeChannel.STATUS_STOPPED
+    return status
   }
 
   private func setArchivists(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-    notImplemented(result)
+    result(FlutterMethodNotImplemented)
   }
 
   private func selfSign(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-    bridgeManager.bridge.selfSignOriginChain()
+    do {
+        try BridgeManager.instance.bridge.selfSignOriginChain()
+    } catch {
+        result(FlutterError(code: "Exception", message: "Excception", details:""))
+    }
 
     //now that we have a new last block
-    getLastBlock(call, result)
+    getLastBlock(call, result:result)
   }
 
-  private func getBlockCount(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-    var hashes = bridgeManager.bridge.blockRepository.getAllOriginBlockHashes()
-    if (hashes == nil) {
-        result(nil)
-        return
+  private func getBlockCount(_ call: FlutterMethodCall, result: @escaping FlutterResult) throws {
+    let hashes = BridgeManager.instance.blockRepo.getAllOriginBlockHashes()
+    var hashObjects = [XyoObjectStructure]()
+    
+    let it = try! hashes.getNewIterator()
+    
+    while (try it.hasNext()) {
+        let item = try it.next()
+        hashObjects.append(item)
     }
     
-    var models = hashesToBoundWitnesses(hashes)
-    result(models.count())
+    let models = hashesToBoundWitnesses(hashes: hashObjects)
+    result(models.count)
   }
 
-  private func getLastBlockData() {
-    var hash = bridgeManager.bridge.originState.previousHash
-    if (hash == nil) {
-        result(nil)
-        return
+  private func getLastBlockData() -> DeviceBoundWitness? {
+    guard let prevHash = BridgeManager.instance.stateRepo.getPreviousHash() else {
+        return nil
     }
     
-    var structure = XyoIterableStructure(hash.bytesCopy, 0)
-
-    var hashArray = arrayOf(structure[0])
-    var hashArrayIterator = hashArray.iterator()
-    var boundWitnesses = hashesToBoundWitnesses(hashArrayIterator)
+    
+    let structure = XyoIterableStructure(value: prevHash.getBuffer())
+    guard let hash = try? structure.get(index: 0) else {
+        return nil
+    }
+    
+    
+    var boundWitnesses = hashesToBoundWitnesses(hashes: [hash])
     return boundWitnesses[0]
   }
 
   private func getLastBlock(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-    var lastModel: BoundWitness.DeviceBoundWitness? = getLastBlockData()
-    result(lastModel?.toByteArray())
+    let lastModel: DeviceBoundWitness? = getLastBlockData()
+    result(try! lastModel?.serializedData())
   }
 
-  private func hashesToBoundWitnesses(hashes: Iterator<XyoObjectStructure>) -> ArrayList<BoundWitness.DeviceBoundWitness> {
-    var models = ArrayList<BoundWitness.DeviceBoundWitness>()
+  private func hashesToBoundWitnesses(hashes: [XyoObjectStructure]) -> [DeviceBoundWitness] {
+    var models = [DeviceBoundWitness]()
 
-    hashes.forEach(hash) {
-      var model = InteractionModel(bridgeManager.bridge.blockRepository, hash.bytesCopy, Date(), true)
-      models.add(model.toBuffer())
+    hashes.forEach { hash in
+      let model = InteractionModel(hash.getBuffer().toByteArray(), date: Date(), linked: true)
+      models.append(model.toBuffer)
     }
 
     return models
   }
+}
 
-  private func notifyNewBoundWitness() {
-      var boundWitness = getLastBlockData()
-
-      if (boundWitness != null) {
-        events.send(boundWitness.toByteArray())
-      }
-  }
-
-  private var onBoundWitness = XyoNodeListener() {
-    override func onBoundWitnessEndSuccess(boundWitness: XyoBoundWitness) {
-      notifyNewBoundWitness()
-    }
+extension XyoBridgeChannel: XyoNodeListener {
+  public func onBoundWitnessStart() {}
+  public func onBoundWitnessEndFailure() {}
+  public func onBoundWitnessDiscovered(boundWitness: XyoBoundWitness) {}
+  public func onBoundWitnessEndSuccess(boundWitness: XyoBoundWitness) {
+    events.send(event: getLastBlockData()!)
   }
 }

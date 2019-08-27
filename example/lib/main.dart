@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:network.xyo.sdk.flutter.example/sections/bridge.dart';
-import 'package:network.xyo.sdk.flutter.example/sections/sentinel.dart';
+
+import 'sections/bridge.dart';
+import 'sections/sentinel.dart';
 
 void main() => runApp(MyApp());
 

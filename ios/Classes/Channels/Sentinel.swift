@@ -3,7 +3,6 @@ class XyoSentinelChannel: XyoNodeChannel {
     override
     init(registrar: FlutterPluginRegistrar, name: String) {
         super.init(registrar: registrar, name: name)
-        bridgeManager = BridgeManager.instance
         XYBluetoothManager.setup()
     }
     

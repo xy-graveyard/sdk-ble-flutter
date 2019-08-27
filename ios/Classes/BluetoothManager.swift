@@ -41,9 +41,6 @@ class XYBluetoothManager {
     }
 
     class func start() {
-        // update bridge
-        BridgeManager.instance.restoreAndInitBridge()
-
         // Enable devices for scanning
         XyoBluetoothDevice.family.enable(enable: true)
         XyoBluetoothDeviceCreator.enable(enable: true)

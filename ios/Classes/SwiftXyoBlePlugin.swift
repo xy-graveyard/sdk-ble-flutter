@@ -22,9 +22,18 @@ public class SwiftXyoBlePlugin: NSObject, FlutterPlugin {
     fileprivate static let scannerWrapper = SmartScanWrapper()
     fileprivate static let boundWitnesses = XYOriginBlockListener()
     fileprivate static let addDevice = AddDeviceListener()
+  
+  fileprivate static var sentinel:XyoSentinelChannel?
+  fileprivate static var bridge:XyoBridgeChannel?
+  fileprivate static var device:XyoDeviceChannel?
 
     public static func register(with registrar: FlutterPluginRegistrar) {
-        // Scanner event channel for getting devices, uses the smart scan wrapper
+      sentinel = XyoSentinelChannel(registrar: registrar, name: "network.xyo/sentinel")
+      bridge = XyoBridgeChannel(registrar: registrar, name: "network.xyo/bridge")
+      device = XyoDeviceChannel(registrar: registrar, name: "network.xyo/device")
+      
+      /*
+      // Scanner event channel for getting devices, uses the smart scan wrapper
         let scannerChannel = FlutterEventChannel(name: "network.xyo/smartscan", binaryMessenger: registrar.messenger())
         scannerChannel.setStreamHandler(self.scannerWrapper.scannerHandler)
 
@@ -39,10 +48,10 @@ public class SwiftXyoBlePlugin: NSObject, FlutterPlugin {
         // Set up the method channel listener
         let gattChannel = FlutterMethodChannel(name: "network.xyo/sdk", binaryMessenger: registrar.messenger())
         let gattInstance = SwiftXyoBlePlugin()
-        registrar.addMethodCallDelegate(gattInstance, channel: gattChannel)
+        registrar.addMethodCallDelegate(gattInstance, channel: gattChannel)*/
 
         // Setup the bluetooth manager
-        XYBluetoothManager.setup()
+        //XYBluetoothManager.setup()
     }
 
     // Main control of any method requests on this channel, farmed out to sub methods
