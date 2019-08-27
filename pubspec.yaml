@@ -8,11 +8,11 @@ environment:
   sdk: ">=2.1.0 <3.0.0"
 
 dependencies:
+  flutter:
+    sdk: flutter
   protobuf: ^0.13.15
   fixnum: ^0.10.9
   permission_handler: ^3.2.2
-  flutter:
-    sdk: flutter
 
 dev_dependencies:
   flutter_test:

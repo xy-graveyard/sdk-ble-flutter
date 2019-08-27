@@ -13,7 +13,7 @@ export 'package:sdk_ble_flutter/protos/bound_witness.pb.dart';
 class XyoDeviceChannel extends MethodChannel {
 
   final EventChannel events;
-  XyoDeviceChannel(String name): events = EventChannel(name), super(name);
+  XyoDeviceChannel(String name): events = EventChannel("${name}Events"), super(name);
 
   // Start listening for button presses on devices
   Future<bool> startAddDevice() async {

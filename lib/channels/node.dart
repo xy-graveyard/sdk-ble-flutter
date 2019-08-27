@@ -2,11 +2,23 @@ import 'package:flutter/services.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:sdk_ble_flutter/protos/bound_witness.pb.dart';
 
+typedef XyoNodeUpdatedCallback = void Function(XyoNodeChannel); 
+
 class XyoNodeChannel extends MethodChannel {
 
   final EventChannel events;
 
-  XyoNodeChannel(String name) : events = EventChannel(name), super(name);
+  XyoNodeChannel(String name) : events = EventChannel("${name}Events"), super(name) {
+    events.receiveBroadcastStream().listen(reportUpdated);
+  }
+
+  Map<String, XyoNodeUpdatedCallback> onUpdated = Map();
+
+  void reportUpdated(dynamic) {
+    onUpdated.forEach(
+      (String key, XyoNodeUpdatedCallback callback) => callback(this)
+    );
+  }
 
   Future<String> start() async {
     Map<PermissionGroup, PermissionStatus> permissions = await PermissionHandler().requestPermissions([PermissionGroup.locationAlways]);

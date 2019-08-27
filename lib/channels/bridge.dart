@@ -1,13 +1,12 @@
-import 'package:flutter/services.dart';
 import 'package:sdk_ble_flutter/channels/node.dart';
 import 'package:sdk_ble_flutter/classes/archivist.dart';
 import 'package:sdk_ble_flutter/main.dart';
 
 class XyoBridgeChannel extends XyoNodeChannel {
 
-  final EventChannel events;
-
-  XyoBridgeChannel(String name) : events = EventChannel(name), super(name);
+  XyoBridgeChannel(String name) : super(name) {
+    events.receiveBroadcastStream();
+  }
 
   // Set the archivists
   Future<bool> setArchivists(List<ArchivistModel> archivists) async {

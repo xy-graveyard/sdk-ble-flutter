@@ -126,11 +126,11 @@ class XyoBridgeChannel(context: Context, registrar: PluginRegistry.Registrar, na
 
   private fun notifyNewBoundWitness() {
     GlobalScope.launch {
-      val hashes = bridgeManager.bridge.blockRepository.getAllOriginBlockHashes().await()
-              ?: return@launch
-      val models = hashesToBoundWitnesses(hashes)
+      val boundWitness = getLastBlockData().await()
 
-      events.send(models.toTypedArray())
+      if (boundWitness != null) {
+        events.send(boundWitness.toByteArray())
+      }
     }
   }
 
