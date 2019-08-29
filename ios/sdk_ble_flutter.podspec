@@ -4,7 +4,7 @@
 Pod::Spec.new do |s|
   s.name             = 'sdk_ble_flutter'
   s.version          = '0.1.0'
-  s.swift_version    = '4.0'
+  s.swift_version    = '4.2'
   s.summary          = 'A new flutter plugin project.'
   s.description      = <<-DESC
 A new flutter plugin project.
@@ -18,7 +18,7 @@ A new flutter plugin project.
   s.public_header_files = 'Classes/**/*.h'
   
   s.dependency 'Flutter'
-  s.dependency 'XyBleSdk', '~> 0.0.2'
+  s.dependency 'XyBleSdk', '~> 0.0.6'
   s.dependency 'SwiftProtobuf', '~> 1.5'
   s.dependency 'sdk-bletcpbridge-swift', '~> 0.1.2-beta.0'
   s.dependency 'sdk-xyobleinterface-swift', '~> 0.1.5-beta.3'

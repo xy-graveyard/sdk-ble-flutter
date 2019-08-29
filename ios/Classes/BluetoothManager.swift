@@ -50,10 +50,6 @@ class XYBluetoothManager {
 
         self.scanner.start(mode: .foreground)
         self.server.start(listener: BridgeManager.instance.bridge)
-
-        XyoHumanHeuristics.resolvers[XyoSchemas.RSSI.id] = RssiResolver()
-        XyoHumanHeuristics.resolvers[XyoSchemas.UNIX_TIME.id] = TimeResolver()
-        XyoHumanHeuristics.resolvers[XyoSchemas.GPS.id] = GpsResolver()
     }
 
     class func stop() {

@@ -10,9 +10,13 @@ class BridgeSection extends StatelessWidget {
 
   Future<void> _start() async {
     try {
-      _setMessage(await XyoSdk.bridge.start());
+        try {
+          _setMessage(await XyoSdk.bridge.start());
+        } catch (ex) {
+          _setMessage("Unexpected Local: $ex");
+        }
     } catch (ex) {
-      _setMessage(ex.message);
+      _setMessage("Unexpected Global: $ex");
     }
   }
 
@@ -44,6 +48,18 @@ class BridgeSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
+        Row(
+          children: <Widget>[
+            FutureBuilder(
+                future: XyoSdk.bridge.status,
+                builder: (context, result) {
+                  final status = result.data;
+                  return (status != null)
+                      ? Text("[Status=${status}]")
+                      : Text("[...]");
+                }),
+          ],
+        ),
         Row(
           children: [
             MaterialButton(

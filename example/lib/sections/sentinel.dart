@@ -29,6 +29,20 @@ class SentinelSection extends StatelessWidget {
     return Column(
       children: [
         Row(
+          children: <Widget>[
+            FutureBuilder(
+                future: XyoSdk.sentinel.status,
+                builder: (context, result) {
+                  final status = result.data;
+                  return (status != null) ?
+                    Text("[Status=${status}]")
+                  :
+                    Text("[...]");
+                
+                }),
+          ],
+        ),
+        Row(
           children: [
             MaterialButton(
               child: Text("Start"),
