@@ -4,12 +4,13 @@ import sdk_objectmodel_swift
 
 class XyoBridgeChannel: XyoNodeChannel {
     
-    override
-    init(registrar: FlutterPluginRegistrar, name: String) {
-        super.init(registrar: registrar, name: name)
-        BridgeManager.instance.restoreAndInitBridge()
-        XYBluetoothManager.setup()
-    }
+  override
+  init(registrar: FlutterPluginRegistrar, name: String) {
+    super.init(registrar: registrar, name: name)
+    BridgeManager.instance.restoreAndInitBridge()
+    BridgeManager.instance.bridge.addListener(key: "BridgeChannel", listener: self)
+    XYBluetoothManager.setup()
+  }
 
   override func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
     do {
@@ -114,6 +115,7 @@ extension XyoBridgeChannel: XyoNodeListener {
   public func onBoundWitnessEndFailure() {}
   public func onBoundWitnessDiscovered(boundWitness: XyoBoundWitness) {}
   public func onBoundWitnessEndSuccess(boundWitness: XyoBoundWitness) {
-    events.send(event: getLastBlockData()!)
+    let lastBlock = getLastBlockData()!
+    events.send(event: try! lastBlock.serializedData())
   }
 }
