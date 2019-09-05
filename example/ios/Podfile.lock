@@ -20,7 +20,7 @@ PODS:
     - sdk-core-swift (~> 0.1.5-beta.2)
     - sdk-objectmodel-swift (~> 0.1.2-beta.3)
     - XyBleSdk (~> 0.0.1)
-  - sdk_ble_flutter (0.1.0):
+  - sdk_ble_flutter (0.1.4):
     - Flutter
     - sdk-bletcpbridge-swift (~> 0.1.2-beta.0)
     - sdk-core-swift (~> 0.1.6-beta.8)
@@ -58,7 +58,7 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/sdk_ble_flutter/ios"
 
 SPEC CHECKSUMS:
-  Flutter: 58dd7d1b27887414a370fcccb9e645c08ffd7a6a
+  Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
   permission_handler: d59f41439f5bc6c4d1005f3355e98f05ddc68ece
   PromisesObjC: c119f3cd559f50b7ae681fa59dc1acd19173b7e6
   PromisesSwift: 37bad6f4daddb02f7c9c531efe91e8b21c13ee2f
@@ -66,7 +66,7 @@ SPEC CHECKSUMS:
   sdk-core-swift: 29d5d28c8b9f83d1d6934b202aeafa93f2e4f37a
   sdk-objectmodel-swift: 58298ea43b2ce0649cc8ebc086392c3b175a8425
   sdk-xyobleinterface-swift: 4002be13cb3d38f88441e41a27449b3d3a785d38
-  sdk_ble_flutter: 5d8dd83085d1ca3f721ac44a00ef0646e1212624
+  sdk_ble_flutter: 50fc89ec262c773e10454ec3c135bfa8e08cf6dd
   secp256k1.swift: a7e7a214f6db6ce5db32cc6b2b45e5c4dd633634
   SwiftProtobuf: e905ca1366405696411aaf174411c4b19c0ef73d
   XyBleSdk: 39d020940b269f816031a0891b9ccd01710a7b3d
