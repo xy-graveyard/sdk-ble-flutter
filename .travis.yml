@@ -39,8 +39,8 @@ matrix:
         - unzip -qq gradle-3.5-bin.zip
         - export GRADLE_HOME=$PWD/gradle-3.5
         - export PATH=$GRADLE_HOME/bin:$PATH
-        - git -b master clone https://github.com/flutter/flutter.git --depth 1
-        - $TRAVIS_BUILD_DIR/flutter/bin/flutter channel dev
+        - git clone https://github.com/flutter/flutter.git --depth 1 -b beta
+        - $TRAVIS_BUILD_DIR/flutter/bin/flutter doctor
       script:
         - cd $TRAVIS_BUILD_DIR/example
         - $TRAVIS_BUILD_DIR/flutter/bin/flutter -v build apk
@@ -52,8 +52,8 @@ matrix:
       osx_image: xcode10.2
       before_script:
         - pip install six
-        - git -b master clone https://github.com/flutter/flutter.git --depth 1
-        - $TRAVIS_BUILD_DIR/flutter/bin/flutter channel dev
+        - git clone https://github.com/flutter/flutter.git --depth 1 -b beta
+        - $TRAVIS_BUILD_DIR/flutter/bin/flutter doctor
       script:
         - cd $TRAVIS_BUILD_DIR/example
         - $TRAVIS_BUILD_DIR/flutter/bin/flutter -v build ios --no-codesign
