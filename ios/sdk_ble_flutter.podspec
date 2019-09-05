@@ -3,11 +3,11 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'sdk_ble_flutter'
-  s.version          = '0.1.0'
+  s.version          = '0.1.4'
   s.swift_version    = '4.2'
-  s.summary          = 'A new flutter plugin project.'
+  s.summary          = 'XYO Flutter SDK.'
   s.description      = <<-DESC
-A new flutter plugin project.
+  XYO Flutter SDK.
                        DESC
   s.homepage         = 'https://xyo.network'
   s.license          = { :file => '../LICENSE' }
