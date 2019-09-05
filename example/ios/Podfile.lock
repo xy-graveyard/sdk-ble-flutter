@@ -1,7 +1,5 @@
 PODS:
   - Flutter (1.0.0)
-  - permission_handler (3.2.2):
-    - Flutter
   - PromisesObjC (1.2.8)
   - PromisesSwift (1.2.8):
     - PromisesObjC (= 1.2.8)
@@ -34,7 +32,6 @@ PODS:
 
 DEPENDENCIES:
   - Flutter (from `.symlinks/flutter/ios-release`)
-  - permission_handler (from `.symlinks/plugins/permission_handler/ios`)
   - sdk_ble_flutter (from `.symlinks/plugins/sdk_ble_flutter/ios`)
 
 SPEC REPOS:
@@ -52,14 +49,11 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   Flutter:
     :path: ".symlinks/flutter/ios-release"
-  permission_handler:
-    :path: ".symlinks/plugins/permission_handler/ios"
   sdk_ble_flutter:
     :path: ".symlinks/plugins/sdk_ble_flutter/ios"
 
 SPEC CHECKSUMS:
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
-  permission_handler: d59f41439f5bc6c4d1005f3355e98f05ddc68ece
   PromisesObjC: c119f3cd559f50b7ae681fa59dc1acd19173b7e6
   PromisesSwift: 37bad6f4daddb02f7c9c531efe91e8b21c13ee2f
   sdk-bletcpbridge-swift: d017726d1246fc1f1fb78d6aa897bf9c4fabc20f
