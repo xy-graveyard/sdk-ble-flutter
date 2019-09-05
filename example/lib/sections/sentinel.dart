@@ -34,11 +34,7 @@ class SentinelSection extends StatelessWidget {
                 future: XyoSdk.sentinel.status,
                 builder: (context, result) {
                   final status = result.data;
-                  return (status != null) ?
-                    Text("[Status=${status}]")
-                  :
-                    Text("[...]");
-                
+                  return (status != null) ? Text("[Status=$status]") : Text("[...]");
                 }),
           ],
         ),
