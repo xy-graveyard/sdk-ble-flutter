@@ -12,7 +12,6 @@ dependencies:
     sdk: flutter
   protobuf: ^0.13.15
   fixnum: ^0.10.9
-  permission_handler: ^3.2.2
   synchronized: 2.1.0+1
 
 dev_dependencies:
