@@ -11,13 +11,10 @@ import network.xyo.ble.devices.XY4BluetoothDevice
 import network.xyo.ble.devices.XYBluetoothDevice
 import network.xyo.ble.devices.XYIBeaconBluetoothDevice
 import network.xyo.ble.scanner.XYSmartScan
-import network.xyo.ble.scanner.XYSmartScanModern
 import network.xyo.modbluetoothkotlin.client.XyoBluetoothClient
 import network.xyo.modbluetoothkotlin.client.XyoSentinelX
 
-class XyoSentinelChannel(context: Context, registrar: PluginRegistry.Registrar, name: String): XyoNodeChannel(context, registrar, name) {
-
-  private val smartScan = XYSmartScanModern(context.applicationContext)
+class XyoSentinelChannel(context: Context, val smartScan: XYSmartScan, registrar: PluginRegistry.Registrar, name: String): XyoNodeChannel(context, registrar, name) {
 
   init {
     XYIBeaconBluetoothDevice.enable(true)

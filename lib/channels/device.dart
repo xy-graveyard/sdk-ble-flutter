@@ -10,19 +10,50 @@ export 'package:sdk_ble_flutter/protos/device.pb.dart';
 
 export 'package:sdk_ble_flutter/protos/bound_witness.pb.dart';
 
-class XyoDeviceChannel extends MethodChannel {
+typedef XyoDeviceUpdatedCallback = void Function(BluetoothDevice);
 
-  final EventChannel events;
-  XyoDeviceChannel(String name): events = EventChannel("${name}Events"), super(name);
+class XyoDeviceChannel extends MethodChannel {
+  Map<String, XyoDeviceUpdatedCallback> onDetectNotify = Map();
+  Map<String, XyoDeviceUpdatedCallback> onEnterNotify = Map();
+  Map<String, XyoDeviceUpdatedCallback> onExitNotify = Map();
+
+  void reportEnter(dynamic device) {
+    final bluetoothDevice = BluetoothDevice.fromBuffer(device);
+    onEnterNotify.forEach((String key, XyoDeviceUpdatedCallback callback) =>
+        callback(bluetoothDevice));
+  }
+
+  void reportExit(dynamic device) {
+    final bluetoothDevice = BluetoothDevice.fromBuffer(device);
+    onExitNotify.forEach((String key, XyoDeviceUpdatedCallback callback) =>
+        callback(bluetoothDevice));
+  }
+
+  void reportDetected(dynamic device) {
+    final bluetoothDevice = BluetoothDevice.fromBuffer(device);
+    onDetectNotify.forEach((String key, XyoDeviceUpdatedCallback callback) =>
+        callback(bluetoothDevice));
+  }
+
+  final EventChannel onEnter;
+  final EventChannel onExit;
+  final EventChannel onDetected;
+  XyoDeviceChannel(String name)
+      : onEnter = EventChannel("${name}OnEnter"),
+        onExit = EventChannel("${name}OnExit"),
+        onDetected = EventChannel("${name}OnDetected"),
+        super(name) {
+    onEnter.receiveBroadcastStream().listen(reportEnter);
+  }
 
   // Start listening for button presses on devices
   Future<bool> startAddDevice() async {
-    return await invokeMethod<bool>('startListening');
+    return await invokeMethod<bool>('start');
   }
 
   // Stop listening for button presses on devices
   Future<bool> stopAddDevice() async {
-    return await invokeMethod<bool>('stopListening');
+    return await invokeMethod<bool>('stop');
   }
 
   /// Run one defined operation on a single device
@@ -46,8 +77,8 @@ class XyoDeviceChannel extends MethodChannel {
   }
 
   /// Run one GATT call on a single device
-  Future<GattResponse> operation(BluetoothDevice device,
-      String serviceUuid, String characteristicUuid) async {
+  Future<GattResponse> operation(BluetoothDevice device, String serviceUuid,
+      String characteristicUuid) async {
     final gattCall = GattCall();
     gattCall.serviceUuid = serviceUuid;
     gattCall.characteristicUuid = characteristicUuid;
@@ -82,8 +113,7 @@ class XyoDeviceChannel extends MethodChannel {
       ..addAll([gattOp1, gattOp2]);
     operations.disconnectOnCompletion = true;
 
-    final Uint8List rawData =
-        await invokeMethod('gattList', <String, dynamic>{
+    final Uint8List rawData = await invokeMethod('gattList', <String, dynamic>{
       'request': operations.writeToBuffer(),
     });
 
@@ -118,8 +148,7 @@ class XyoDeviceChannel extends MethodChannel {
       ..addAll([buzzer]);
     operations.disconnectOnCompletion = true;
 
-    final Uint8List rawData =
-        await invokeMethod('gattGroup', <String, dynamic>{
+    final Uint8List rawData = await invokeMethod('gattGroup', <String, dynamic>{
       'request': operations.writeToBuffer(),
     });
 
@@ -180,8 +209,7 @@ class XyoDeviceChannel extends MethodChannel {
       ..clear()
       ..addAll([unlock, buzzer]);
 
-    final Uint8List rawData =
-        await invokeMethod('gattGroup', <String, dynamic>{
+    final Uint8List rawData = await invokeMethod('gattGroup', <String, dynamic>{
       'request': operations.writeToBuffer(),
     });
 

@@ -223,8 +223,7 @@ object HumanReadableBoundWitness {
             }
 
             val unixTime = ByteBuffer.wrap(value).long
-            val date = Date(unixTime)
-            return date.toString()
+            return unixTime.toString()
         }
     }
 

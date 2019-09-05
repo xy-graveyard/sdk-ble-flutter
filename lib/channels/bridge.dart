@@ -3,7 +3,6 @@ import 'package:sdk_ble_flutter/classes/archivist.dart';
 import 'package:sdk_ble_flutter/main.dart';
 
 class XyoBridgeChannel extends XyoNodeChannel {
-
   XyoBridgeChannel(String name) : super(name) {
     events.receiveBroadcastStream();
   }

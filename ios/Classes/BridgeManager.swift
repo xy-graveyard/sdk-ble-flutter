@@ -36,6 +36,7 @@ internal class BridgeManager {
   public func restoreAndInitBridge () {
     
     XyoHumanHeuristics.resolvers[XyoSchemas.RSSI.id] = RssiResolver()
+    XyoHumanHeuristics.resolvers[XyoSchemas.INDEX.id] = IndexResolver()
     XyoHumanHeuristics.resolvers[XyoSchemas.UNIX_TIME.id] = TimeResolver()
     XyoHumanHeuristics.resolvers[XyoSchemas.GPS.id] = GpsResolver()
     

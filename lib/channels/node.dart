@@ -1,5 +1,4 @@
 import 'package:flutter/services.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:sdk_ble_flutter/protos/bound_witness.pb.dart';
 
 typedef XyoNodeUpdatedCallback = void Function(XyoNodeChannel);
@@ -40,6 +39,11 @@ class XyoNodeChannel extends MethodChannel {
   // Get blockCount
   Future<int> get blockCount async {
     return invokeMethod<int>('getBlockCount');
+  }
+
+  // Get blockByIndex
+  Future<DeviceBoundWitnessList> get blocks async {
+    return DeviceBoundWitnessList.fromBuffer(await invokeMethod('getBlocks'));
   }
 
   // Get block by Index

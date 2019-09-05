@@ -2,6 +2,7 @@ package network.xyo.ble.xyo_ble
 
 import io.flutter.plugin.common.PluginRegistry.Registrar
 import network.xyo.ble.scanner.XYSmartScan
+import network.xyo.ble.scanner.XYSmartScanModern
 import network.xyo.ble.xyo_ble.channels.*
 
 @kotlin.ExperimentalUnsignedTypes
@@ -14,9 +15,10 @@ class XyoBlePlugin: XYSmartScan.Listener() {
 
     @JvmStatic fun registerWith(registrar: Registrar) {
       val context = registrar.activeContext()
-      sentinel = XyoSentinelChannel(context, registrar, "network.xyo/sentinel")
-      bridge = XyoBridgeChannel(context, registrar, "network.xyo/bridge")
-      device = XyoDeviceChannel(context, registrar, "network.xyo/device")
+      val smartScan = XYSmartScanModern(context.applicationContext)
+      sentinel = XyoSentinelChannel(context, smartScan, registrar, "network.xyo/sentinel")
+      bridge = XyoBridgeChannel(context, smartScan, registrar, "network.xyo/bridge")
+      device = XyoDeviceChannel(context, smartScan, registrar, "network.xyo/device")
 
       sentinel?.initializeChannels()
       bridge?.initializeChannels()

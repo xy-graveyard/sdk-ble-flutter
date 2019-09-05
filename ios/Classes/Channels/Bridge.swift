@@ -24,6 +24,9 @@ class XyoBridgeChannel: XyoNodeChannel {
       case "getLastBlock":
         getLastBlock(call, result: result)
         break
+      case "getBlocks":
+        getBlocks(call, result: result)
+        break
       case "selfSign":
         selfSign(call, result: result)
         break
@@ -96,6 +99,31 @@ class XyoBridgeChannel: XyoNodeChannel {
   private func getLastBlock(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
     let lastModel: DeviceBoundWitness? = getLastBlockData()
     result(try! lastModel?.serializedData())
+  }
+  
+  private func getBlocksData() -> DeviceBoundWitnessList? {
+    let hashes = BridgeManager.instance.blockRepo.getAllOriginBlockHashes()
+    guard let iterator = try? hashes.getNewIterator() else {return nil}
+    
+    var list = [XyoObjectStructure]()
+    
+    while(try! iterator.hasNext()) {
+      list.append(try! iterator.next())
+    }
+    
+    let boundWitnesseses = hashesToBoundWitnesses(hashes: list)
+    
+    var bwList = DeviceBoundWitnessList()
+    boundWitnesseses.forEach { item in
+      bwList.boundWitnesses.append(item)
+    }
+    
+    return bwList
+  }
+  
+  private func getBlocks(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+    let model: DeviceBoundWitnessList? = getBlocksData()
+    result(try! model?.serializedData())
   }
 
   private func hashesToBoundWitnesses(hashes: [XyoObjectStructure]) -> [DeviceBoundWitness] {

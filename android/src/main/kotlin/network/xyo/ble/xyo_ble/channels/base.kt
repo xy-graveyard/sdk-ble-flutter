@@ -37,7 +37,7 @@ open class XyoBaseChannel(registrar: PluginRegistry.Registrar, name: String): Me
         }
     }
 
-    fun initializeChannels() {
+    open fun initializeChannels() {
         methodChannel.setMethodCallHandler(this)
         eventChannel.setStreamHandler(events)
     }
