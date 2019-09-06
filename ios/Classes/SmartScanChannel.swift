@@ -9,6 +9,7 @@ extension XYBluetoothDevice {
     var toBuffer: BluetoothDevice {
         return BluetoothDevice.with {
             $0.id = self.id
+            $0.name = self.name
             $0.family = self.family.toBuffer
             $0.connected = self.connected
             $0.rssi = Int64(self.rssi)

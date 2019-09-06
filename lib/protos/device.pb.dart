@@ -132,6 +132,7 @@ class BluetoothDevice extends $pb.GeneratedMessage {
     ..a<Int64>(4, 'rssi', $pb.PbFieldType.OS6, Int64.ZERO)
     ..a<Range>(5, 'range', $pb.PbFieldType.OM, Range.getDefault, Range.create)
     ..aOB(6, 'connected')
+    ..aOS(7, 'name')
     ..hasRequiredFields = false
   ;
 
@@ -178,5 +179,10 @@ class BluetoothDevice extends $pb.GeneratedMessage {
   set connected($core.bool v) { $_setBool(5, v); }
   $core.bool hasConnected() => $_has(5);
   void clearConnected() => clearField(6);
+
+  $core.String get name => $_getS(6, '');
+  set name($core.String v) { $_setString(6, v); }
+  $core.bool hasName() => $_has(6);
+  void clearName() => clearField(7);
 }
 

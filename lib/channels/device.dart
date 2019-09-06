@@ -19,20 +19,17 @@ class XyoDeviceChannel extends MethodChannel {
 
   void reportEnter(dynamic device) {
     final bluetoothDevice = BluetoothDevice.fromBuffer(device);
-    onEnterNotify.forEach((String key, XyoDeviceUpdatedCallback callback) =>
-        callback(bluetoothDevice));
+    onEnterNotify.forEach((String key, XyoDeviceUpdatedCallback callback) => callback(bluetoothDevice));
   }
 
   void reportExit(dynamic device) {
     final bluetoothDevice = BluetoothDevice.fromBuffer(device);
-    onExitNotify.forEach((String key, XyoDeviceUpdatedCallback callback) =>
-        callback(bluetoothDevice));
+    onExitNotify.forEach((String key, XyoDeviceUpdatedCallback callback) => callback(bluetoothDevice));
   }
 
   void reportDetected(dynamic device) {
     final bluetoothDevice = BluetoothDevice.fromBuffer(device);
-    onDetectNotify.forEach((String key, XyoDeviceUpdatedCallback callback) =>
-        callback(bluetoothDevice));
+    onDetectNotify.forEach((String key, XyoDeviceUpdatedCallback callback) => callback(bluetoothDevice));
   }
 
   final EventChannel onEnter;
@@ -41,9 +38,11 @@ class XyoDeviceChannel extends MethodChannel {
   XyoDeviceChannel(String name)
       : onEnter = EventChannel("${name}OnEnter"),
         onExit = EventChannel("${name}OnExit"),
-        onDetected = EventChannel("${name}OnDetected"),
+        onDetected = EventChannel("${name}OnDetect"),
         super(name) {
     onEnter.receiveBroadcastStream().listen(reportEnter);
+    onExit.receiveBroadcastStream().listen(reportExit);
+    onDetected.receiveBroadcastStream().listen(reportDetected);
   }
 
   // Start listening for button presses on devices
@@ -57,14 +56,12 @@ class XyoDeviceChannel extends MethodChannel {
   }
 
   /// Run one defined operation on a single device
-  Future<GattResponse> defined(
-      BluetoothDevice device, DefinedOperation operation) async {
+  Future<GattResponse> defined(BluetoothDevice device, DefinedOperation operation) async {
     final gattOp = GattOperation();
     gattOp.definedOperation = operation;
     gattOp.deviceId = device.id;
 
-    final Uint8List rawData =
-        await invokeMethod('gattSingle', <String, dynamic>{
+    final Uint8List rawData = await invokeMethod('gattSingle', <String, dynamic>{
       'request': gattOp.writeToBuffer(),
     });
 
@@ -77,8 +74,7 @@ class XyoDeviceChannel extends MethodChannel {
   }
 
   /// Run one GATT call on a single device
-  Future<GattResponse> operation(BluetoothDevice device, String serviceUuid,
-      String characteristicUuid) async {
+  Future<GattResponse> operation(BluetoothDevice device, String serviceUuid, String characteristicUuid) async {
     final gattCall = GattCall();
     gattCall.serviceUuid = serviceUuid;
     gattCall.characteristicUuid = characteristicUuid;
@@ -87,8 +83,7 @@ class XyoDeviceChannel extends MethodChannel {
     gattOp.deviceId = device.id;
     gattOp.gattCall = gattCall;
 
-    final Uint8List rawData =
-        await invokeMethod('gattSingle', <String, dynamic>{
+    final Uint8List rawData = await invokeMethod('gattSingle', <String, dynamic>{
       'request': gattOp.writeToBuffer(),
     });
 
@@ -99,13 +94,11 @@ class XyoDeviceChannel extends MethodChannel {
   Future<GattResponse> get definedListDifferentDevices async {
     final gattOp1 = GattOperation();
     gattOp1.definedOperation = DefinedOperation.SONG;
-    gattOp1.deviceId =
-        'xy:ibeacon:a44eacf4-0104-0000-0000-5f784c9977b5.8196.2628';
+    gattOp1.deviceId = 'xy:ibeacon:a44eacf4-0104-0000-0000-5f784c9977b5.8196.2628';
 
     final gattOp2 = GattOperation();
     gattOp2.definedOperation = DefinedOperation.SONG;
-    gattOp2.deviceId =
-        'xy:ibeacon:a44eacf4-0104-0000-0000-5f784c9977b5.12308.27748';
+    gattOp2.deviceId = 'xy:ibeacon:a44eacf4-0104-0000-0000-5f784c9977b5.12308.27748';
 
     final operations = GattOperationList();
     operations.operations
@@ -124,11 +117,9 @@ class XyoDeviceChannel extends MethodChannel {
   Future<GattResponse> get buzzerDefined async {
     final buzzer = GattOperation();
     buzzer.definedOperation = DefinedOperation.SONG;
-    buzzer.deviceId =
-        'xy:ibeacon:a44eacf4-0104-0000-0000-5f784c9977b5.69.17896';
+    buzzer.deviceId = 'xy:ibeacon:a44eacf4-0104-0000-0000-5f784c9977b5.69.17896';
 
-    final Uint8List rawData =
-        await invokeMethod('gattSingle', <String, dynamic>{
+    final Uint8List rawData = await invokeMethod('gattSingle', <String, dynamic>{
       'request': buzzer.writeToBuffer(),
     });
 
@@ -141,8 +132,7 @@ class XyoDeviceChannel extends MethodChannel {
     buzzer.definedOperation = DefinedOperation.SONG;
 
     final operations = GattOperationList();
-    operations.deviceId =
-        'xy:ibeacon:a44eacf4-0104-0000-0000-5f784c9977b5.69.17896';
+    operations.deviceId = 'xy:ibeacon:a44eacf4-0104-0000-0000-5f784c9977b5.69.17896';
     operations.operations
       ..clear()
       ..addAll([buzzer]);
@@ -166,24 +156,8 @@ class XyoDeviceChannel extends MethodChannel {
     unlock.gattCall = unlockCall;
 
     final unlockData = GattOperation_Write();
-    unlockData.request = Uint8List.fromList([
-      0x00,
-      0x01,
-      0x02,
-      0x03,
-      0x04,
-      0x05,
-      0x06,
-      0x07,
-      0x08,
-      0x09,
-      0x0a,
-      0x0b,
-      0x0c,
-      0x0d,
-      0x0e,
-      0x0f
-    ]);
+    unlockData.request =
+        Uint8List.fromList([0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f]);
     unlockData.requiresResponse = true;
 
     unlock.writeRequest = unlockData;
@@ -203,8 +177,7 @@ class XyoDeviceChannel extends MethodChannel {
     buzzer.writeRequest = buzzerData;
 
     final operations = GattOperationList();
-    operations.deviceId =
-        'xy:ibeacon:a44eacf4-0104-0000-0000-5f784c9977b5.69.17896';
+    operations.deviceId = 'xy:ibeacon:a44eacf4-0104-0000-0000-5f784c9977b5.69.17896';
     operations.operations
       ..clear()
       ..addAll([unlock, buzzer]);

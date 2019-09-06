@@ -114,6 +114,11 @@ struct BluetoothDevice {
     set {_uniqueStorage()._connected = newValue}
   }
 
+  var name: String {
+    get {return _storage._name}
+    set {_uniqueStorage()._name = newValue}
+  }
+
   var unknownFields = SwiftProtobuf.UnknownStorage()
 
   init() {}
@@ -255,6 +260,7 @@ extension BluetoothDevice: SwiftProtobuf.Message, SwiftProtobuf._MessageImplemen
     4: .same(proto: "rssi"),
     5: .same(proto: "range"),
     6: .same(proto: "connected"),
+    7: .same(proto: "name"),
   ]
 
   fileprivate class _StorageClass {
@@ -264,6 +270,7 @@ extension BluetoothDevice: SwiftProtobuf.Message, SwiftProtobuf._MessageImplemen
     var _rssi: Int64 = 0
     var _range: Range? = nil
     var _connected: Bool = false
+    var _name: String = String()
 
     static let defaultInstance = _StorageClass()
 
@@ -276,6 +283,7 @@ extension BluetoothDevice: SwiftProtobuf.Message, SwiftProtobuf._MessageImplemen
       _rssi = source._rssi
       _range = source._range
       _connected = source._connected
+      _name = source._name
     }
   }
 
@@ -297,6 +305,7 @@ extension BluetoothDevice: SwiftProtobuf.Message, SwiftProtobuf._MessageImplemen
         case 4: try decoder.decodeSingularSInt64Field(value: &_storage._rssi)
         case 5: try decoder.decodeSingularMessageField(value: &_storage._range)
         case 6: try decoder.decodeSingularBoolField(value: &_storage._connected)
+        case 7: try decoder.decodeSingularStringField(value: &_storage._name)
         default: break
         }
       }
@@ -323,6 +332,9 @@ extension BluetoothDevice: SwiftProtobuf.Message, SwiftProtobuf._MessageImplemen
       if _storage._connected != false {
         try visitor.visitSingularBoolField(value: _storage._connected, fieldNumber: 6)
       }
+      if !_storage._name.isEmpty {
+        try visitor.visitSingularStringField(value: _storage._name, fieldNumber: 7)
+      }
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -338,6 +350,7 @@ extension BluetoothDevice: SwiftProtobuf.Message, SwiftProtobuf._MessageImplemen
         if _storage._rssi != rhs_storage._rssi {return false}
         if _storage._range != rhs_storage._range {return false}
         if _storage._connected != rhs_storage._connected {return false}
+        if _storage._name != rhs_storage._name {return false}
         return true
       }
       if !storagesAreEqual {return false}
