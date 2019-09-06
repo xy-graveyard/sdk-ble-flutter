@@ -19,8 +19,8 @@ internal class BridgeManager {
   
   let hasher = XyoSha256()
   let storage = CoreDataStorage()
-  lazy var blockRepo = XyoStrageProviderOriginBlockRepository(storageProvider: self.storage, hasher: self.hasher)
-  lazy var stateRepo = XyoStorageOriginChainStateRepository(storage: self.storage)
+  lazy var blockRepo = XyoStorageProviderOriginBlockRepository(storageProvider: self.storage, hasher: self.hasher)
+  lazy var stateRepo = XyoStorageOriginStateRepository(storage: self.storage)
   lazy var queueRepo = XyoStorageBridgeQueueRepository(storage: self.storage)
   lazy var configuration = XyoRepositoryConfiguration(originState: self.stateRepo, originBlock: self.blockRepo)
   lazy var bridge = XyoBleToTcpBridge(hasher: self.hasher,
@@ -49,8 +49,8 @@ internal class BridgeManager {
       stateRepo.restoreState(signers: [getSignerFromStorage()])
       queueRepo.restoreQueue()
       
-      bridge.addHuerestic(key: "TIME", getter: XyoUnixTime())
-      bridge.addHuerestic(key: "GPS", getter: XyoGps())
+      bridge.addHeuristic(key: "TIME", getter: XyoUnixTime())
+      bridge.addHeuristic(key: "GPS", getter: XyoGps())
       
       if try bridge.originState.getIndex().getValueCopy().getUInt32(offset: 0) == 0 {
         try bridge.selfSignOriginChain()
@@ -74,13 +74,13 @@ internal class BridgeManager {
   public func setPaymentKey (key: [UInt8]) {
     let encodedKey = XyoObjectStructure.newInstance(schema: XyoSchemas.PAYMENT_KEY, bytes: XyoBuffer(data: key))
     
-    self.bridge.originState.repo.setStaticHuerestics(huerestics: [encodedKey])
+    self.bridge.originState.repo.setStaticHeuristics(heuristics: [encodedKey])
     self.stateRepo.commit()
   }
   
   public func getPaymentKey () -> [UInt8]? {
     do {
-      let huerestics = self.stateRepo.getStaticHuerestics()
+      let huerestics = self.stateRepo.getStaticHeuristics()
       
       for huerestic in huerestics {
         if try huerestic.getSchema().id == XyoSchemas.PAYMENT_KEY.id {
@@ -186,7 +186,7 @@ final public class XYOriginBlockListener {
     self.accessQueue.async(flags: .barrier) {
       do {
         var viewModels = [InteractionModel]()
-        let hashes = try (BridgeManager.instance.bridge.repositoryConfiguration.originBlock as! XyoStrageProviderOriginBlockRepository)
+        let hashes = try (BridgeManager.instance.bridge.repositoryConfiguration.originBlock as! XyoStorageProviderOriginBlockRepository)
           .getAllOriginBlockHashes().getNewIterator()
         
         while try hashes.hasNext() {

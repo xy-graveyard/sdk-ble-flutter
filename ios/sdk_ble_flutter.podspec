@@ -23,6 +23,7 @@ Pod::Spec.new do |s|
   s.dependency 'sdk-bletcpbridge-swift', '~> 3.0'
   s.dependency 'sdk-xyobleinterface-swift', '~> 3.0'
   s.dependency 'sdk-core-swift', '~> 3.0.1'
+  s.dependency 'sdk-objectmodel-swift', '~> 3.0.1'
 
   s.ios.deployment_target = '11.0'
 end

@@ -12,7 +12,7 @@ PODS:
   - sdk-core-swift (3.0.1):
     - sdk-objectmodel-swift (~> 3.0)
     - secp256k1.swift
-  - sdk-objectmodel-swift (3.0.0)
+  - sdk-objectmodel-swift (3.0.1)
   - sdk-xyobleinterface-swift (3.0.2):
     - PromisesSwift (~> 1.2.4)
     - sdk-core-swift (~> 3.0.1)
@@ -22,6 +22,7 @@ PODS:
     - Flutter
     - sdk-bletcpbridge-swift (~> 3.0)
     - sdk-core-swift (~> 3.0.1)
+    - sdk-objectmodel-swift (~> 3.0.1)
     - sdk-xyobleinterface-swift (~> 3.0)
     - SwiftProtobuf (~> 1.5)
     - XyBleSdk (~> 3.0)
@@ -58,9 +59,9 @@ SPEC CHECKSUMS:
   PromisesSwift: 37bad6f4daddb02f7c9c531efe91e8b21c13ee2f
   sdk-bletcpbridge-swift: 8b52371f2c21e41dd00dba35728c675b9d5629fa
   sdk-core-swift: 6b089045fe8483388bd3c82d2d1375d796c29745
-  sdk-objectmodel-swift: 4f80ae7001734127c850d47ec453727a6c26867a
+  sdk-objectmodel-swift: ef0331719d7fb2249a883928286c4746dbcf9067
   sdk-xyobleinterface-swift: 63d311e26581b2a8aabaf33da0bcfe09ab58d191
-  sdk_ble_flutter: de41b9e5cf72823fc4a3576c4f1370f6c901d69d
+  sdk_ble_flutter: e11e1ea5ce8d304aaad328609fac428af0595b84
   secp256k1.swift: a7e7a214f6db6ce5db32cc6b2b45e5c4dd633634
   SwiftProtobuf: e905ca1366405696411aaf174411c4b19c0ef73d
   XyBleSdk: a9c26c8474ea4118cd111158af570ccafa546713

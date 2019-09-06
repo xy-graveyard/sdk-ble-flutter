@@ -51,12 +51,15 @@ matrix:
       language: objective-c
       osx_image: xcode10.2
       before_script:
+        - gem install cocoapods-acknowledgements
+        - gem install cocoapods
+        - pod repo update
         - pip install six
         - git clone https://github.com/flutter/flutter.git --depth 1 -b beta
         - $TRAVIS_BUILD_DIR/flutter/bin/flutter doctor
       script:
         - cd $TRAVIS_BUILD_DIR/example
-        - $TRAVIS_BUILD_DIR/flutter/bin/flutter -v build ios --no-codesign
+        - $TRAVIS_BUILD_DIR/flutter/bin/flutter build ios --no-codesign
       deploy:
         provider: script
         script: cd $TRAVIS_BUILD_DIR && bash $TRAVIS_BUILD_DIR/scripts/deploy.sh
