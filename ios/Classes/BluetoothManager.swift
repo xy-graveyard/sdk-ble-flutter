@@ -19,7 +19,7 @@ class XYBluetoothManager {
 //            port: 11001)
 
     fileprivate static let server = XyoBluetoothServer()
-    fileprivate static let scanner: XYSmartScan = XYSmartScan.instance
+    static let scanner: XYSmartScan = XYSmartScan.instance
 
     // Called once the user has logged in
     class func setup() {

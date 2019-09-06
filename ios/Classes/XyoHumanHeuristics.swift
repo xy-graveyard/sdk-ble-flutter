@@ -114,7 +114,7 @@ struct TimeResolver: XyoHumanHeuristicResolver {
 
         let mills = objectValue.getUInt64(offset: 0)
 
-        return String(Int64.init(mills/1000))
+        return String(Int64.init(mills))
     }
 }
 
