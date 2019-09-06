@@ -55,9 +55,7 @@ matrix:
         - git clone https://github.com/flutter/flutter.git --depth 1 -b beta
         - $TRAVIS_BUILD_DIR/flutter/bin/flutter doctor
       script:
-        - cd $TRAVIS_BUILD_DIR/example/ios
-        - pod install
-        - cd ..
+        - cd $TRAVIS_BUILD_DIR/example
         - $TRAVIS_BUILD_DIR/flutter/bin/flutter -v build ios --no-codesign
       deploy:
         provider: script

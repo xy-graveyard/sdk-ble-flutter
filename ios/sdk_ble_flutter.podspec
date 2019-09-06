@@ -18,11 +18,11 @@ Pod::Spec.new do |s|
   s.public_header_files = 'Classes/**/*.h'
   
   s.dependency 'Flutter'
-  s.dependency 'XyBleSdk', '~> 0.0.6'
+  s.dependency 'XyBleSdk', '~> 3.0'
   s.dependency 'SwiftProtobuf', '~> 1.5'
-  s.dependency 'sdk-bletcpbridge-swift', '~> 0.1.2-beta.0'
-  s.dependency 'sdk-xyobleinterface-swift', '~> 0.1.5-beta.3'
-  s.dependency 'sdk-core-swift', '~> 0.1.6-beta.8'
+  s.dependency 'sdk-bletcpbridge-swift', '~> 3.0'
+  s.dependency 'sdk-xyobleinterface-swift', '~> 3.0'
+  s.dependency 'sdk-core-swift', '~> 3.0.1'
 
   s.ios.deployment_target = '11.0'
 end
