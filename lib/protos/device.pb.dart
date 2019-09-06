@@ -1,10 +1,11 @@
 ///
 //  Generated code. Do not modify.
 //  source: protos/device.proto
-///
-// ignore_for_file: camel_case_types,non_constant_identifier_names,library_prefixes,unused_import,unused_shown_name
+//
+// @dart = 2.3
+// ignore_for_file: camel_case_types,non_constant_identifier_names,library_prefixes,unused_import,unused_shown_name,return_of_invalid_type
 
-import 'dart:core' as $core show bool, Deprecated, double, int, List, Map, override, String;
+import 'dart:core' as $core show bool, Deprecated, double, int, List, Map, override, pragma, String;
 
 import 'package:fixnum/fixnum.dart';
 import 'package:protobuf/protobuf.dart' as $pb;
@@ -18,13 +19,15 @@ class Family extends $pb.GeneratedMessage {
     ..hasRequiredFields = false
   ;
 
-  Family() : super();
-  Family.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) : super.fromBuffer(i, r);
-  Family.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) : super.fromJson(i, r);
+  Family._() : super();
+  factory Family() => create();
+  factory Family.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory Family.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   Family clone() => Family()..mergeFromMessage(this);
   Family copyWith(void Function(Family) updates) => super.copyWith((message) => updates(message as Family));
   $pb.BuilderInfo get info_ => _i;
-  static Family create() => Family();
+  @$core.pragma('dart2js:noInline')
+  static Family create() => Family._();
   Family createEmptyInstance() => create();
   static $pb.PbList<Family> createRepeated() => $pb.PbList<Family>();
   static Family getDefault() => _defaultInstance ??= create()..freeze();
@@ -58,13 +61,15 @@ class Range extends $pb.GeneratedMessage {
     ..hasRequiredFields = false
   ;
 
-  Range() : super();
-  Range.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) : super.fromBuffer(i, r);
-  Range.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) : super.fromJson(i, r);
+  Range._() : super();
+  factory Range() => create();
+  factory Range.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory Range.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   Range clone() => Range()..mergeFromMessage(this);
   Range copyWith(void Function(Range) updates) => super.copyWith((message) => updates(message as Range));
   $pb.BuilderInfo get info_ => _i;
-  static Range create() => Range();
+  @$core.pragma('dart2js:noInline')
+  static Range create() => Range._();
   Range createEmptyInstance() => create();
   static $pb.PbList<Range> createRepeated() => $pb.PbList<Range>();
   static Range getDefault() => _defaultInstance ??= create()..freeze();
@@ -89,13 +94,15 @@ class IBeacon extends $pb.GeneratedMessage {
     ..hasRequiredFields = false
   ;
 
-  IBeacon() : super();
-  IBeacon.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) : super.fromBuffer(i, r);
-  IBeacon.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) : super.fromJson(i, r);
+  IBeacon._() : super();
+  factory IBeacon() => create();
+  factory IBeacon.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory IBeacon.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   IBeacon clone() => IBeacon()..mergeFromMessage(this);
   IBeacon copyWith(void Function(IBeacon) updates) => super.copyWith((message) => updates(message as IBeacon));
   $pb.BuilderInfo get info_ => _i;
-  static IBeacon create() => IBeacon();
+  @$core.pragma('dart2js:noInline')
+  static IBeacon create() => IBeacon._();
   IBeacon createEmptyInstance() => create();
   static $pb.PbList<IBeacon> createRepeated() => $pb.PbList<IBeacon>();
   static IBeacon getDefault() => _defaultInstance ??= create()..freeze();
@@ -128,13 +135,15 @@ class BluetoothDevice extends $pb.GeneratedMessage {
     ..hasRequiredFields = false
   ;
 
-  BluetoothDevice() : super();
-  BluetoothDevice.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) : super.fromBuffer(i, r);
-  BluetoothDevice.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) : super.fromJson(i, r);
+  BluetoothDevice._() : super();
+  factory BluetoothDevice() => create();
+  factory BluetoothDevice.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory BluetoothDevice.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   BluetoothDevice clone() => BluetoothDevice()..mergeFromMessage(this);
   BluetoothDevice copyWith(void Function(BluetoothDevice) updates) => super.copyWith((message) => updates(message as BluetoothDevice));
   $pb.BuilderInfo get info_ => _i;
-  static BluetoothDevice create() => BluetoothDevice();
+  @$core.pragma('dart2js:noInline')
+  static BluetoothDevice create() => BluetoothDevice._();
   BluetoothDevice createEmptyInstance() => create();
   static $pb.PbList<BluetoothDevice> createRepeated() => $pb.PbList<BluetoothDevice>();
   static BluetoothDevice getDefault() => _defaultInstance ??= create()..freeze();

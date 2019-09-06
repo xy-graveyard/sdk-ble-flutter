@@ -1,10 +1,11 @@
 ///
 //  Generated code. Do not modify.
 //  source: protos/gatt.proto
-///
-// ignore_for_file: camel_case_types,non_constant_identifier_names,library_prefixes,unused_import,unused_shown_name
+//
+// @dart = 2.3
+// ignore_for_file: camel_case_types,non_constant_identifier_names,library_prefixes,unused_import,unused_shown_name,return_of_invalid_type
 
-import 'dart:core' as $core show bool, Deprecated, double, int, List, Map, override, String;
+import 'dart:core' as $core show bool, Deprecated, double, int, List, Map, override, pragma, String;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
@@ -20,13 +21,15 @@ class GattOperationList extends $pb.GeneratedMessage {
     ..hasRequiredFields = false
   ;
 
-  GattOperationList() : super();
-  GattOperationList.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) : super.fromBuffer(i, r);
-  GattOperationList.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) : super.fromJson(i, r);
+  GattOperationList._() : super();
+  factory GattOperationList() => create();
+  factory GattOperationList.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GattOperationList.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   GattOperationList clone() => GattOperationList()..mergeFromMessage(this);
   GattOperationList copyWith(void Function(GattOperationList) updates) => super.copyWith((message) => updates(message as GattOperationList));
   $pb.BuilderInfo get info_ => _i;
-  static GattOperationList create() => GattOperationList();
+  @$core.pragma('dart2js:noInline')
+  static GattOperationList create() => GattOperationList._();
   GattOperationList createEmptyInstance() => create();
   static $pb.PbList<GattOperationList> createRepeated() => $pb.PbList<GattOperationList>();
   static GattOperationList getDefault() => _defaultInstance ??= create()..freeze();
@@ -52,13 +55,15 @@ class GattCall extends $pb.GeneratedMessage {
     ..hasRequiredFields = false
   ;
 
-  GattCall() : super();
-  GattCall.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) : super.fromBuffer(i, r);
-  GattCall.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) : super.fromJson(i, r);
+  GattCall._() : super();
+  factory GattCall() => create();
+  factory GattCall.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GattCall.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   GattCall clone() => GattCall()..mergeFromMessage(this);
   GattCall copyWith(void Function(GattCall) updates) => super.copyWith((message) => updates(message as GattCall));
   $pb.BuilderInfo get info_ => _i;
-  static GattCall create() => GattCall();
+  @$core.pragma('dart2js:noInline')
+  static GattCall create() => GattCall._();
   GattCall createEmptyInstance() => create();
   static $pb.PbList<GattCall> createRepeated() => $pb.PbList<GattCall>();
   static GattCall getDefault() => _defaultInstance ??= create()..freeze();
@@ -82,13 +87,15 @@ class GattOperation_Write extends $pb.GeneratedMessage {
     ..hasRequiredFields = false
   ;
 
-  GattOperation_Write() : super();
-  GattOperation_Write.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) : super.fromBuffer(i, r);
-  GattOperation_Write.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) : super.fromJson(i, r);
+  GattOperation_Write._() : super();
+  factory GattOperation_Write() => create();
+  factory GattOperation_Write.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GattOperation_Write.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   GattOperation_Write clone() => GattOperation_Write()..mergeFromMessage(this);
   GattOperation_Write copyWith(void Function(GattOperation_Write) updates) => super.copyWith((message) => updates(message as GattOperation_Write));
   $pb.BuilderInfo get info_ => _i;
-  static GattOperation_Write create() => GattOperation_Write();
+  @$core.pragma('dart2js:noInline')
+  static GattOperation_Write create() => GattOperation_Write._();
   GattOperation_Write createEmptyInstance() => create();
   static $pb.PbList<GattOperation_Write> createRepeated() => $pb.PbList<GattOperation_Write>();
   static GattOperation_Write getDefault() => _defaultInstance ??= create()..freeze();
@@ -118,22 +125,24 @@ class GattOperation extends $pb.GeneratedMessage {
     0 : GattOperation_Operation.notSet
   };
   static final $pb.BuilderInfo _i = $pb.BuilderInfo('GattOperation')
+    ..oo(0, [2, 3])
     ..aOS(1, 'deviceId')
     ..e<DefinedOperation>(2, 'definedOperation', $pb.PbFieldType.OE, DefinedOperation.STAY_AWAKE, DefinedOperation.valueOf, DefinedOperation.values)
     ..a<GattCall>(3, 'gattCall', $pb.PbFieldType.OM, GattCall.getDefault, GattCall.create)
     ..a<GattOperation_Write>(4, 'writeRequest', $pb.PbFieldType.OM, GattOperation_Write.getDefault, GattOperation_Write.create)
     ..aOB(5, 'disconnectOnCompletion')
-    ..oo(0, [2, 3])
     ..hasRequiredFields = false
   ;
 
-  GattOperation() : super();
-  GattOperation.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) : super.fromBuffer(i, r);
-  GattOperation.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) : super.fromJson(i, r);
+  GattOperation._() : super();
+  factory GattOperation() => create();
+  factory GattOperation.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GattOperation.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   GattOperation clone() => GattOperation()..mergeFromMessage(this);
   GattOperation copyWith(void Function(GattOperation) updates) => super.copyWith((message) => updates(message as GattOperation));
   $pb.BuilderInfo get info_ => _i;
-  static GattOperation create() => GattOperation();
+  @$core.pragma('dart2js:noInline')
+  static GattOperation create() => GattOperation._();
   GattOperation createEmptyInstance() => create();
   static $pb.PbList<GattOperation> createRepeated() => $pb.PbList<GattOperation>();
   static GattOperation getDefault() => _defaultInstance ??= create()..freeze();
@@ -174,13 +183,15 @@ class GattResponseList extends $pb.GeneratedMessage {
     ..hasRequiredFields = false
   ;
 
-  GattResponseList() : super();
-  GattResponseList.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) : super.fromBuffer(i, r);
-  GattResponseList.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) : super.fromJson(i, r);
+  GattResponseList._() : super();
+  factory GattResponseList() => create();
+  factory GattResponseList.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GattResponseList.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   GattResponseList clone() => GattResponseList()..mergeFromMessage(this);
   GattResponseList copyWith(void Function(GattResponseList) updates) => super.copyWith((message) => updates(message as GattResponseList));
   $pb.BuilderInfo get info_ => _i;
-  static GattResponseList create() => GattResponseList();
+  @$core.pragma('dart2js:noInline')
+  static GattResponseList create() => GattResponseList._();
   GattResponseList createEmptyInstance() => create();
   static $pb.PbList<GattResponseList> createRepeated() => $pb.PbList<GattResponseList>();
   static GattResponseList getDefault() => _defaultInstance ??= create()..freeze();
@@ -202,22 +213,24 @@ class GattResponse extends $pb.GeneratedMessage {
     0 : GattResponse_Operation.notSet
   };
   static final $pb.BuilderInfo _i = $pb.BuilderInfo('GattResponse')
+    ..oo(0, [2, 3])
     ..aOS(1, 'deviceId')
     ..e<DefinedOperation>(2, 'definedOperation', $pb.PbFieldType.OE, DefinedOperation.STAY_AWAKE, DefinedOperation.valueOf, DefinedOperation.values)
     ..a<GattCall>(3, 'gattCall', $pb.PbFieldType.OM, GattCall.getDefault, GattCall.create)
     ..a<$core.List<$core.int>>(4, 'response', $pb.PbFieldType.OY)
     ..aOS(5, 'error')
-    ..oo(0, [2, 3])
     ..hasRequiredFields = false
   ;
 
-  GattResponse() : super();
-  GattResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) : super.fromBuffer(i, r);
-  GattResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) : super.fromJson(i, r);
+  GattResponse._() : super();
+  factory GattResponse() => create();
+  factory GattResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GattResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   GattResponse clone() => GattResponse()..mergeFromMessage(this);
   GattResponse copyWith(void Function(GattResponse) updates) => super.copyWith((message) => updates(message as GattResponse));
   $pb.BuilderInfo get info_ => _i;
-  static GattResponse create() => GattResponse();
+  @$core.pragma('dart2js:noInline')
+  static GattResponse create() => GattResponse._();
   GattResponse createEmptyInstance() => create();
   static $pb.PbList<GattResponse> createRepeated() => $pb.PbList<GattResponse>();
   static GattResponse getDefault() => _defaultInstance ??= create()..freeze();

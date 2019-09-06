@@ -10,11 +10,51 @@ export 'package:sdk_ble_flutter/protos/device.pb.dart';
 
 export 'package:sdk_ble_flutter/protos/bound_witness.pb.dart';
 
-class XyoDevice {
+typedef XyoDeviceUpdatedCallback = void Function(BluetoothDevice);
 
-  MethodChannel channel;
+class XyoDeviceChannel extends MethodChannel {
+  Map<String, XyoDeviceUpdatedCallback> onDetectNotify = Map();
+  Map<String, XyoDeviceUpdatedCallback> onEnterNotify = Map();
+  Map<String, XyoDeviceUpdatedCallback> onExitNotify = Map();
 
-  XyoDevice(this.channel);
+  void reportEnter(dynamic device) {
+    final bluetoothDevice = BluetoothDevice.fromBuffer(device);
+    onEnterNotify.forEach((String key, XyoDeviceUpdatedCallback callback) =>
+        callback(bluetoothDevice));
+  }
+
+  void reportExit(dynamic device) {
+    final bluetoothDevice = BluetoothDevice.fromBuffer(device);
+    onExitNotify.forEach((String key, XyoDeviceUpdatedCallback callback) =>
+        callback(bluetoothDevice));
+  }
+
+  void reportDetected(dynamic device) {
+    final bluetoothDevice = BluetoothDevice.fromBuffer(device);
+    onDetectNotify.forEach((String key, XyoDeviceUpdatedCallback callback) =>
+        callback(bluetoothDevice));
+  }
+
+  final EventChannel onEnter;
+  final EventChannel onExit;
+  final EventChannel onDetected;
+  XyoDeviceChannel(String name)
+      : onEnter = EventChannel("${name}OnEnter"),
+        onExit = EventChannel("${name}OnExit"),
+        onDetected = EventChannel("${name}OnDetected"),
+        super(name) {
+    onEnter.receiveBroadcastStream().listen(reportEnter);
+  }
+
+  // Start listening for button presses on devices
+  Future<bool> startAddDevice() async {
+    return await invokeMethod<bool>('start');
+  }
+
+  // Stop listening for button presses on devices
+  Future<bool> stopAddDevice() async {
+    return await invokeMethod<bool>('stop');
+  }
 
   /// Run one defined operation on a single device
   Future<GattResponse> defined(
@@ -24,7 +64,7 @@ class XyoDevice {
     gattOp.deviceId = device.id;
 
     final Uint8List rawData =
-        await channel.invokeMethod('gattSingle', <String, dynamic>{
+        await invokeMethod('gattSingle', <String, dynamic>{
       'request': gattOp.writeToBuffer(),
     });
 
@@ -37,8 +77,8 @@ class XyoDevice {
   }
 
   /// Run one GATT call on a single device
-  Future<GattResponse> operation(BluetoothDevice device,
-      String serviceUuid, String characteristicUuid) async {
+  Future<GattResponse> operation(BluetoothDevice device, String serviceUuid,
+      String characteristicUuid) async {
     final gattCall = GattCall();
     gattCall.serviceUuid = serviceUuid;
     gattCall.characteristicUuid = characteristicUuid;
@@ -48,7 +88,7 @@ class XyoDevice {
     gattOp.gattCall = gattCall;
 
     final Uint8List rawData =
-        await channel.invokeMethod('gattSingle', <String, dynamic>{
+        await invokeMethod('gattSingle', <String, dynamic>{
       'request': gattOp.writeToBuffer(),
     });
 
@@ -73,8 +113,7 @@ class XyoDevice {
       ..addAll([gattOp1, gattOp2]);
     operations.disconnectOnCompletion = true;
 
-    final Uint8List rawData =
-        await channel.invokeMethod('gattList', <String, dynamic>{
+    final Uint8List rawData = await invokeMethod('gattList', <String, dynamic>{
       'request': operations.writeToBuffer(),
     });
 
@@ -89,7 +128,7 @@ class XyoDevice {
         'xy:ibeacon:a44eacf4-0104-0000-0000-5f784c9977b5.69.17896';
 
     final Uint8List rawData =
-        await channel.invokeMethod('gattSingle', <String, dynamic>{
+        await invokeMethod('gattSingle', <String, dynamic>{
       'request': buzzer.writeToBuffer(),
     });
 
@@ -109,8 +148,7 @@ class XyoDevice {
       ..addAll([buzzer]);
     operations.disconnectOnCompletion = true;
 
-    final Uint8List rawData =
-        await channel.invokeMethod('gattGroup', <String, dynamic>{
+    final Uint8List rawData = await invokeMethod('gattGroup', <String, dynamic>{
       'request': operations.writeToBuffer(),
     });
 
@@ -171,8 +209,7 @@ class XyoDevice {
       ..clear()
       ..addAll([unlock, buzzer]);
 
-    final Uint8List rawData =
-        await channel.invokeMethod('gattGroup', <String, dynamic>{
+    final Uint8List rawData = await invokeMethod('gattGroup', <String, dynamic>{
       'request': operations.writeToBuffer(),
     });
 

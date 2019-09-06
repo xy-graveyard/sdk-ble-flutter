@@ -33,7 +33,7 @@ class ArchivistModel {
     );
   }
 
-  static get defaultArchivist =>
+  static ArchivistModel get defaultArchivist =>
       ArchivistModel(dns: 'alpha-peers.xyo.network', port: 11001);
 
   static List<ArchivistModel> fromQuery(dynamic json) {

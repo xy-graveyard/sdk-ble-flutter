@@ -1,4 +1,4 @@
-package com.example.example;
+package network.xyo.sdk.flutter.example.android;
 
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;

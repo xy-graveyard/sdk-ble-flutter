@@ -82,6 +82,24 @@ struct RssiResolver: XyoHumanHeuristicResolver {
     }
 }
 
+struct IndexResolver: XyoHumanHeuristicResolver {
+  func getHumanKey(partyIndex: Int) -> String {
+    return String(format: NSLocalizedString("Index %d", comment: "index value"), partyIndex)
+  }
+  
+  func getHumanName (object: XyoObjectStructure, partyIndex: Int) throws -> String? {
+    let objectValue = try object.getValueCopy()
+    
+    if objectValue.getSize() > 0 {
+      let index = Int32(bitPattern: (objectValue.getUInt32(offset: 0)))
+      
+      return String(index)
+    }
+    
+    return nil
+  }
+}
+
 struct TimeResolver: XyoHumanHeuristicResolver {
     func getHumanKey(partyIndex: Int) -> String {
         return String(format: NSLocalizedString("Time %d", comment: "time value"), partyIndex)
@@ -95,10 +113,8 @@ struct TimeResolver: XyoHumanHeuristicResolver {
         }
 
         let mills = objectValue.getUInt64(offset: 0)
-        let formatter = DateFormatter()
-        formatter.dateFormat = "MM-dd-yyyy HH:mm"
 
-        return formatter.string(from: NSDate(timeIntervalSince1970: Double(mills) / 1000) as Date)
+        return String(Int64.init(mills/1000))
     }
 }
 
