@@ -9,7 +9,7 @@ import Foundation
 import sdk_core_swift
 import sdk_objectmodel_swift
 
-struct XyoUnixTime: XyoHueresticGetter {
+struct XyoUnixTime: XyoHeuristicGetter {
     func getHeuristic() -> XyoObjectStructure? {
         let time: Double = NSDate().timeIntervalSince1970
         let timeAsMilliseconds = UInt64(time * 1000)
