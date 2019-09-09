@@ -84,11 +84,11 @@ final class AddDeviceListener {
         // Disconnect to the devices if they were connected to
         if let xyoDevice = self.xyoDevice {
             xyoDevice.cancelButtonPressTimer()
-            XYCentral.instance.disconnect(from: xyoDevice)
+            xyoDevice.disconnect()
         }
 
         if let xy4Device = self.xy4Device {
-            XYCentral.instance.disconnect(from: xy4Device)
+            xy4Device.disconnect()
         }
     }
 

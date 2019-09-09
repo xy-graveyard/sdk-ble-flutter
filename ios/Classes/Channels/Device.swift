@@ -1,4 +1,5 @@
 import XyBleSdk
+import sdk_xyobleinterface_swift
 
 class XyoDeviceChannel: XyoBaseChannel {
   
@@ -29,6 +30,12 @@ class XyoDeviceChannel: XyoBaseChannel {
     onExitChannel.setStreamHandler(onExit)
     onDetectChannel.setStreamHandler(onDetect)
     
+    XyoBluetoothDevice.family.enable(enable: true)
+    XyoBluetoothDeviceCreator.enable(enable: true)
+    XY4BluetoothDevice.family.enable(enable: true)
+    XY4BluetoothDeviceCreator.enable(enable: true)
+    XyoSentinelXDeviceCreator().enable(enable: true)
+    
     XYBluetoothManager.scanner.setDelegate(self, key: "DeviceChannel")
   }
   
@@ -56,10 +63,12 @@ class XyoDeviceChannel: XyoBaseChannel {
   }
   
   private func start(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+    XYBluetoothManager.scanner.start(mode: XYSmartScanMode.foreground)
     result(true)
   }
   
   private func stop(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+    XYBluetoothManager.scanner.stop()
     result(true)
   }
   
@@ -80,11 +89,15 @@ extension XyoDeviceChannel : XYSmartScanDelegate {
   
   func smartScan(status: XYSmartScanStatus) {}
   func smartScan(location: XYLocationCoordinate2D) {}
-  func smartScan(detected device: XYBluetoothDevice, signalStrength: Int, family: XYDeviceFamily) {
+  func smartScan(detected device: XYBluetoothDevice, rssi: Int, family: XYDeviceFamily) {
     let buffer = device.toBuffer
       onDetect.send(event: try! buffer.serializedData())
   }
-  func smartScan(detected devices: [XYBluetoothDevice], family: XYDeviceFamily) {}
+  func smartScan(detected devices: [XYBluetoothDevice], family: XYDeviceFamily) {
+    devices.forEach { device in
+      self.smartScan(detected: device, rssi: device.rssi, family: family)
+    }
+  }
   func smartScan(entered device: XYBluetoothDevice) {
     let buffer = device.toBuffer
       onEnter.send(event: try! buffer.serializedData())
