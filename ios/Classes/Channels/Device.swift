@@ -90,8 +90,10 @@ extension XyoDeviceChannel : XYSmartScanDelegate {
   func smartScan(status: XYSmartScanStatus) {}
   func smartScan(location: XYLocationCoordinate2D) {}
   func smartScan(detected device: XYBluetoothDevice, rssi: Int, family: XYDeviceFamily) {
-    let buffer = device.toBuffer
+    if (device.rssi != 127) {
+      let buffer = device.toBuffer
       onDetect.send(event: try! buffer.serializedData())
+    }
   }
   func smartScan(detected devices: [XYBluetoothDevice], family: XYDeviceFamily) {
     devices.forEach { device in
@@ -100,11 +102,11 @@ extension XyoDeviceChannel : XYSmartScanDelegate {
   }
   func smartScan(entered device: XYBluetoothDevice) {
     let buffer = device.toBuffer
-      onEnter.send(event: try! buffer.serializedData())
+    onEnter.send(event: try! buffer.serializedData())
   }
   func smartScan(exiting device:XYBluetoothDevice) {}
   func smartScan(exited device: XYBluetoothDevice) {
     let buffer = device.toBuffer
-      onExit.send(event: try! buffer.serializedData())
+    onExit.send(event: try! buffer.serializedData())
   }
 }

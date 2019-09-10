@@ -73,6 +73,7 @@ class XyoDeviceChannel(context: Context, val smartScan: XYSmartScan, registrar: 
     XyoSentinelX.enable(true)
     XY4BluetoothDevice.enable(true)
     smartScan.addListener("device", listener)
+    smartScan.start()
   }
 
   override fun initializeChannels() {
