@@ -119,6 +119,11 @@ struct BluetoothDevice {
     set {_uniqueStorage()._name = newValue}
   }
 
+  var address: String {
+    get {return _storage._address}
+    set {_uniqueStorage()._address = newValue}
+  }
+
   var unknownFields = SwiftProtobuf.UnknownStorage()
 
   init() {}
@@ -261,6 +266,7 @@ extension BluetoothDevice: SwiftProtobuf.Message, SwiftProtobuf._MessageImplemen
     5: .same(proto: "range"),
     6: .same(proto: "connected"),
     7: .same(proto: "name"),
+    8: .same(proto: "address"),
   ]
 
   fileprivate class _StorageClass {
@@ -271,6 +277,7 @@ extension BluetoothDevice: SwiftProtobuf.Message, SwiftProtobuf._MessageImplemen
     var _range: Range? = nil
     var _connected: Bool = false
     var _name: String = String()
+    var _address: String = String()
 
     static let defaultInstance = _StorageClass()
 
@@ -284,6 +291,7 @@ extension BluetoothDevice: SwiftProtobuf.Message, SwiftProtobuf._MessageImplemen
       _range = source._range
       _connected = source._connected
       _name = source._name
+      _address = source._address
     }
   }
 
@@ -306,6 +314,7 @@ extension BluetoothDevice: SwiftProtobuf.Message, SwiftProtobuf._MessageImplemen
         case 5: try decoder.decodeSingularMessageField(value: &_storage._range)
         case 6: try decoder.decodeSingularBoolField(value: &_storage._connected)
         case 7: try decoder.decodeSingularStringField(value: &_storage._name)
+        case 8: try decoder.decodeSingularStringField(value: &_storage._address)
         default: break
         }
       }
@@ -335,6 +344,9 @@ extension BluetoothDevice: SwiftProtobuf.Message, SwiftProtobuf._MessageImplemen
       if !_storage._name.isEmpty {
         try visitor.visitSingularStringField(value: _storage._name, fieldNumber: 7)
       }
+      if !_storage._address.isEmpty {
+        try visitor.visitSingularStringField(value: _storage._address, fieldNumber: 8)
+      }
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -351,6 +363,7 @@ extension BluetoothDevice: SwiftProtobuf.Message, SwiftProtobuf._MessageImplemen
         if _storage._range != rhs_storage._range {return false}
         if _storage._connected != rhs_storage._connected {return false}
         if _storage._name != rhs_storage._name {return false}
+        if _storage._address != rhs_storage._address {return false}
         return true
       }
       if !storagesAreEqual {return false}

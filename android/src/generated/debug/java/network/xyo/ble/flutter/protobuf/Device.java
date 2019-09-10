@@ -1340,6 +1340,16 @@ public final class Device {
      */
     com.google.protobuf.ByteString
         getNameBytes();
+
+    /**
+     * <code>string address = 8;</code>
+     */
+    java.lang.String getAddress();
+    /**
+     * <code>string address = 8;</code>
+     */
+    com.google.protobuf.ByteString
+        getAddressBytes();
   }
   /**
    * Protobuf type {@code BluetoothDevice}
@@ -1352,6 +1362,7 @@ public final class Device {
     private BluetoothDevice() {
       id_ = "";
       name_ = "";
+      address_ = "";
     }
     public static final int ID_FIELD_NUMBER = 1;
     private java.lang.String id_;
@@ -1669,6 +1680,54 @@ public final class Device {
   checkByteStringIsUtf8(value);
       
       name_ = value.toStringUtf8();
+    }
+
+    public static final int ADDRESS_FIELD_NUMBER = 8;
+    private java.lang.String address_;
+    /**
+     * <code>string address = 8;</code>
+     */
+    @java.lang.Override
+    public java.lang.String getAddress() {
+      return address_;
+    }
+    /**
+     * <code>string address = 8;</code>
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getAddressBytes() {
+      return com.google.protobuf.ByteString.copyFromUtf8(address_);
+    }
+    /**
+     * <code>string address = 8;</code>
+     */
+    private void setAddress(
+        java.lang.String value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  
+      address_ = value;
+    }
+    /**
+     * <code>string address = 8;</code>
+     */
+    private void clearAddress() {
+      
+      address_ = getDefaultInstance().getAddress();
+    }
+    /**
+     * <code>string address = 8;</code>
+     */
+    private void setAddressBytes(
+        com.google.protobuf.ByteString value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+      
+      address_ = value.toStringUtf8();
     }
 
     public static network.xyo.ble.flutter.protobuf.Device.BluetoothDevice parseFrom(
@@ -2039,6 +2098,48 @@ public final class Device {
         return this;
       }
 
+      /**
+       * <code>string address = 8;</code>
+       */
+      @java.lang.Override
+      public java.lang.String getAddress() {
+        return instance.getAddress();
+      }
+      /**
+       * <code>string address = 8;</code>
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString
+          getAddressBytes() {
+        return instance.getAddressBytes();
+      }
+      /**
+       * <code>string address = 8;</code>
+       */
+      public Builder setAddress(
+          java.lang.String value) {
+        copyOnWrite();
+        instance.setAddress(value);
+        return this;
+      }
+      /**
+       * <code>string address = 8;</code>
+       */
+      public Builder clearAddress() {
+        copyOnWrite();
+        instance.clearAddress();
+        return this;
+      }
+      /**
+       * <code>string address = 8;</code>
+       */
+      public Builder setAddressBytes(
+          com.google.protobuf.ByteString value) {
+        copyOnWrite();
+        instance.setAddressBytes(value);
+        return this;
+      }
+
       // @@protoc_insertion_point(builder_scope:BluetoothDevice)
     }
     @java.lang.Override
@@ -2062,10 +2163,11 @@ public final class Device {
               "range_",
               "connected_",
               "name_",
+              "address_",
             };
             java.lang.String info =
-                "\u0000\u0007\u0000\u0000\u0001\u0007\u0007\u0000\u0000\u0000\u0001\u0208\u0002\t" +
-                "\u0003\t\u0004\u0010\u0005\t\u0006\u0007\u0007\u0208";
+                "\u0000\b\u0000\u0000\u0001\b\b\u0000\u0000\u0000\u0001\u0208\u0002\t\u0003\t\u0004" +
+                "\u0010\u0005\t\u0006\u0007\u0007\u0208\b\u0208";
             return newMessageInfo(DEFAULT_INSTANCE, info, objects);
         }
         // fall through

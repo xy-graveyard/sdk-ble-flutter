@@ -13,6 +13,9 @@ import network.xyo.ble.xyo_ble.GattGroupRequest
 import network.xyo.ble.xyo_ble.GattSingleRequest
 import network.xyo.modbluetoothkotlin.client.XyoBluetoothClient
 import network.xyo.modbluetoothkotlin.client.XyoSentinelX
+import network.xyo.modbluetoothkotlin.client.XyoBridgeX
+import network.xyo.modbluetoothkotlin.client.XyoAndroidAppX
+import network.xyo.modbluetoothkotlin.client.XyoIosAppX
 
 class XyoDeviceChannel(context: Context, val smartScan: XYSmartScan, registrar: PluginRegistry.Registrar, name: String): XyoBaseChannel(registrar, name) {
 
@@ -36,6 +39,18 @@ class XyoDeviceChannel(context: Context, val smartScan: XYSmartScan, registrar: 
       }
       if (device is XY4BluetoothDevice) {
         family.setPrefix("xy")
+      }
+      if (device is XyoSentinelX) {
+        family.setName("SenX")
+      }
+      if (device is XyoBridgeX) {
+        family.setName("BridgeX")
+      }
+      if (device is XyoAndroidAppX) {
+        family.setName("AndroidAppX")
+      }
+      if (device is XyoIosAppX) {
+        family.setName("IosAppX")
       }
       builder.setFamily(family)
       builder.setConnected(device.connected)
@@ -68,7 +83,6 @@ class XyoDeviceChannel(context: Context, val smartScan: XYSmartScan, registrar: 
   private val onDetectChannel = EventChannel(registrar.messenger(), "${name}OnDetect")
 
   init {
-    XYIBeaconBluetoothDevice.enable(true)
     XyoBluetoothClient.enable(true)
     XyoSentinelX.enable(true)
     XY4BluetoothDevice.enable(true)

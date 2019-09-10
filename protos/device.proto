@@ -32,4 +32,5 @@ message BluetoothDevice {
     Range range = 5;
     bool connected = 6;
     string name = 7;
+    string address = 8;
 }

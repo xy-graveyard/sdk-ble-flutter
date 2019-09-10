@@ -13,8 +13,7 @@ import network.xyo.ble.flutter.protobuf.BoundWitness
 import network.xyo.ble.gatt.server.XYBluetoothGattServer
 import network.xyo.ble.scanner.XYSmartScan
 import network.xyo.ble.xyo_ble.InteractionModel
-import network.xyo.modbluetoothkotlin.client.XyoBluetoothClient
-import network.xyo.modbluetoothkotlin.client.XyoSentinelX
+import network.xyo.modbluetoothkotlin.client.*
 import network.xyo.modbluetoothkotlin.server.XyoBluetoothServer
 import network.xyo.sdkcorekotlin.boundWitness.XyoBoundWitness
 import network.xyo.sdkcorekotlin.node.XyoNodeListener
@@ -35,9 +34,11 @@ class XyoBridgeChannel(context: Context, val smartScan: XYSmartScan, registrar: 
             bridgeManager.bridge.addListener("bridge", onBoundWitness)
         }
 
-        XYIBeaconBluetoothDevice.enable(true)
-        XyoBluetoothClient.enable(true)
         XyoSentinelX.enable(true)
+        XyoBridgeX.enable(true)
+        XyoIosAppX.enable(true)
+        XyoAndroidAppX.enable(true)
+        XyoBluetoothClient.enable(true)
         XY4BluetoothDevice.enable(true)
     }
 
