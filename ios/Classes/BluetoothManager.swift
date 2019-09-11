@@ -67,7 +67,7 @@ class XYBluetoothManager {
     class func listenForXy4(_ handler: @escaping (XYBluetoothDevice) -> Void) {
         XY4BluetoothDevice.family.enable(enable: true)
         XY4BluetoothDeviceCreator.enable(enable: true)
-        XYLocation.instance.startRangning(for: XY4BluetoothDevice.family)
+        XYLocation.instance.startRanging(for: XY4BluetoothDevice.family)
 
         self.subscribeKey = XYFinderDeviceEventManager.subscribe(to: [.buttonPressed]) { event in
             handler(event.device)
