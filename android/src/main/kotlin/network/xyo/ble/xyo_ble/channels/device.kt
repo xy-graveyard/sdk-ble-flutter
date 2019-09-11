@@ -21,10 +21,20 @@ class XyoDeviceChannel(context: Context, val smartScan: XYSmartScan, registrar: 
 
   private val listener = object: XYSmartScan.Listener() {
     override fun statusChanged(status: XYSmartScan.Status) {
+      val statusString = when(status) {
+        XYSmartScan.Status.None -> "none"
+        XYSmartScan.Status.Enabled -> "enabled"
+        XYSmartScan.Status.BluetoothDisabled -> "bluetoothDisabled"
+        XYSmartScan.Status.BluetoothUnavailable -> "bluetoothUnavailable"
+        XYSmartScan.Status.LocationDisabled -> "locationDisabled"
+        else -> "unknown"
+      }
+      onStatus.send(statusString)
       super.statusChanged(status)
     }
 
     override fun connectionStateChanged(device: XYBluetoothDevice, newState: Int) {
+      onConnection.send(buildDevice(device).toByteArray())
       super.connectionStateChanged(device, newState)
     }
 
@@ -39,6 +49,7 @@ class XyoDeviceChannel(context: Context, val smartScan: XYSmartScan, registrar: 
       }
       if (device is XY4BluetoothDevice) {
         family.setPrefix("xy")
+        family.setName("XY4+")
       }
       if (device is XyoSentinelX) {
         family.setName("SenX")
@@ -77,10 +88,14 @@ class XyoDeviceChannel(context: Context, val smartScan: XYSmartScan, registrar: 
   private val onEnter = EventStreamHandler()
   private val onExit = EventStreamHandler()
   private val onDetect = EventStreamHandler()
+  private val onStatus = EventStreamHandler()
+  private val onConnection = EventStreamHandler()
 
   private val onEnterChannel = EventChannel(registrar.messenger(), "${name}OnEnter")
   private val onExitChannel = EventChannel(registrar.messenger(), "${name}OnExit")
   private val onDetectChannel = EventChannel(registrar.messenger(), "${name}OnDetect")
+  private val onStatusChannel = EventChannel(registrar.messenger(), "${name}OnStatus")
+  private val onConnectionChannel = EventChannel(registrar.messenger(), "${name}OnConnection")
 
   init {
     XyoBluetoothClient.enable(true)
@@ -95,6 +110,8 @@ class XyoDeviceChannel(context: Context, val smartScan: XYSmartScan, registrar: 
     onEnterChannel.setStreamHandler(onEnter)
     onExitChannel.setStreamHandler(onExit)
     onDetectChannel.setStreamHandler(onDetect)
+    onStatusChannel.setStreamHandler(onStatus)
+    onConnectionChannel.setStreamHandler(onConnection)
   }
 
   override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {

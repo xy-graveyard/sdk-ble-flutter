@@ -1,4 +1,5 @@
 {
   "editor.formatOnSave": true,
-  "dart.lineLength": 128
+  "dart.lineLength": 128,
+  "java.configuration.updateBuildConfiguration": "automatic"
 }

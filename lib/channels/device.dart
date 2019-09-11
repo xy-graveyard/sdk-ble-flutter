@@ -12,12 +12,26 @@ export 'package:sdk_ble_flutter/protos/bound_witness.pb.dart';
 
 enum XyoDeviceType { sentinel, bridge, android, ios, xy4 }
 
+enum XyoStatus { none, enabled, bluetoothDisabled, bluetoothUnavailable, locationDisabled, unknown }
+
+final Map<String, XyoStatus> stringToStatus = {
+  "none": XyoStatus.none,
+  "enabled": XyoStatus.enabled,
+  "bluetoothDisabled": XyoStatus.bluetoothDisabled,
+  "bluetoothUnavailable": XyoStatus.bluetoothUnavailable,
+  "locationDisabled": XyoStatus.locationDisabled,
+  "unknown": XyoStatus.unknown
+};
+
 typedef XyoDeviceUpdatedCallback = void Function(BluetoothDevice);
+typedef XyoStatusUpdatedCallback = void Function(XyoStatus);
 
 class XyoDeviceChannel extends MethodChannel {
   Map<String, XyoDeviceUpdatedCallback> onDetectNotify = Map();
   Map<String, XyoDeviceUpdatedCallback> onEnterNotify = Map();
   Map<String, XyoDeviceUpdatedCallback> onExitNotify = Map();
+  Map<String, XyoStatusUpdatedCallback> onStatusNotify = Map();
+  Map<String, XyoDeviceUpdatedCallback> onConnectionNotify = Map();
 
   void reportEnter(dynamic device) {
     final bluetoothDevice = BluetoothDevice.fromBuffer(device);
@@ -34,17 +48,33 @@ class XyoDeviceChannel extends MethodChannel {
     onDetectNotify.forEach((String key, XyoDeviceUpdatedCallback callback) => callback(bluetoothDevice));
   }
 
+  void reportStatus(dynamic statusString) {
+    final status = stringToStatus[statusString] ?? XyoStatus.unknown;
+    onStatusNotify.forEach((String key, XyoStatusUpdatedCallback callback) => callback(status));
+  }
+
+  void reportConnection(dynamic device) {
+    final bluetoothDevice = BluetoothDevice.fromBuffer(device);
+    onConnectionNotify.forEach((String key, XyoDeviceUpdatedCallback callback) => callback(bluetoothDevice));
+  }
+
   final EventChannel onEnter;
   final EventChannel onExit;
   final EventChannel onDetected;
+  final EventChannel onStatus;
+  final EventChannel onConnection;
   XyoDeviceChannel(String name)
       : onEnter = EventChannel("${name}OnEnter"),
         onExit = EventChannel("${name}OnExit"),
         onDetected = EventChannel("${name}OnDetect"),
+        onStatus = EventChannel("${name}OnStatus"),
+        onConnection = EventChannel("${name}OnConnection"),
         super(name) {
     onEnter.receiveBroadcastStream().listen(reportEnter);
     onExit.receiveBroadcastStream().listen(reportExit);
     onDetected.receiveBroadcastStream().listen(reportDetected);
+    onStatus.receiveBroadcastStream().listen(reportStatus);
+    onConnection.receiveBroadcastStream().listen(reportConnection);
   }
 
   // Start listening for button presses on devices
