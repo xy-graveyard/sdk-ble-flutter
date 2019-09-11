@@ -7,10 +7,13 @@ class XyoBridgeChannel extends XyoNodeChannel {
     events.receiveBroadcastStream();
   }
 
+  Future<String> getStatus() async {
+    return null;
+  }
+
   // Set the archivists
   Future<bool> setArchivists(List<ArchivistModel> archivists) async {
-    final List<Map<String, dynamic>> values =
-        archivists.map((a) => {'dns': a.dns, 'port': a.port}).toList();
+    final List<Map<String, dynamic>> values = archivists.map((a) => {'dns': a.dns, 'port': a.port}).toList();
 
     return await invokeMethod('setArchivists', <String, dynamic>{
       'archivists': values,
