@@ -32,8 +32,6 @@ class XyoDeviceChannel: XyoBaseChannel {
     
     XyoBluetoothDevice.family.enable(enable: true)
     XyoBluetoothDeviceCreator.enable(enable: true)
-    XY4BluetoothDevice.family.enable(enable: true)
-    XY4BluetoothDeviceCreator.enable(enable: true)
     XyoSentinelXDeviceCreator().enable(enable: true)
     
     XYBluetoothManager.scanner.setDelegate(self, key: "DeviceChannel")
@@ -90,10 +88,8 @@ extension XyoDeviceChannel : XYSmartScanDelegate {
   func smartScan(status: XYSmartScanStatus) {}
   func smartScan(location: XYLocationCoordinate2D) {}
   func smartScan(detected device: XYBluetoothDevice, rssi: Int, family: XYDeviceFamily) {
-    if (device.rssi != 127) {
-      let buffer = device.toBuffer
-      onDetect.send(event: try! buffer.serializedData())
-    }
+    let buffer = device.toBuffer
+    onDetect.send(event: try! buffer.serializedData())
   }
   func smartScan(detected devices: [XYBluetoothDevice], family: XYDeviceFamily) {
     devices.forEach { device in

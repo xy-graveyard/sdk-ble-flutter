@@ -42,11 +42,14 @@ class XYBluetoothManager {
 
     class func start() {
         // Enable devices for scanning
-        XyoBluetoothDevice.family.enable(enable: true)
+        //XyoBluetoothDevice.family.enable(enable: true)
         XyoBluetoothDeviceCreator.enable(enable: true)
       XY4BluetoothDevice.family.enable(enable: true)
       XY4BluetoothDeviceCreator.enable(enable: true)
         XyoSentinelXDeviceCreator().enable(enable: true)
+      XyoBridgeXDeviceCreator().enable(enable: true)
+      XyoAndroidXDeviceCreator().enable(enable: true)
+      XyoIosXDeviceCreator().enable(enable: true)
 
         self.scanner.setDelegate(BridgeManager.instance.bridge, key: "BRIDGE_PRIMARY")
 

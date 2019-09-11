@@ -5,11 +5,25 @@ import sdk_xyobleinterface_swift
 import sdk_core_swift
 
 extension XYBluetoothDevice {
+  
+  func getNameFromType() -> String {
+    var name = self.name
+    if (self is XyoSentinelXDevice) {
+      name = "SenX"
+    } else if (self is XyoBridgeXDevice) {
+      name = "BridgeX"
+    } else if (self is XyoIosXDevice) {
+      name = "IosAppX"
+    } else if (self is XyoAndroidXDevice) {
+      name = "AndroidAppX"
+    }
+    return name
+  }
 
     var toBuffer: BluetoothDevice {
-        return BluetoothDevice.with {
+        var result = BluetoothDevice.with {
             $0.id = self.id
-            $0.name = self.name
+            $0.name = getNameFromType()
             $0.family = self.family.toBuffer
             $0.connected = self.connected
             $0.rssi = Int64(self.rssi)
@@ -17,6 +31,8 @@ extension XYBluetoothDevice {
                 $0.beacon = beacon
             }
         }
+      result.family.name = result.name
+      return result
     }
 
 }
