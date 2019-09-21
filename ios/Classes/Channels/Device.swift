@@ -8,10 +8,12 @@ class XyoDeviceChannel: XyoBaseChannel {
   private let onEnterChannel: FlutterEventChannel
   private let onExitChannel: FlutterEventChannel
   private let onDetectChannel: FlutterEventChannel
+  private let onStatusChannel: FlutterEventChannel
   
   private let onEnter = EventStreamHandler()
   private let onExit = EventStreamHandler()
   private let onDetect = EventStreamHandler()
+  private let onStatus = EventStreamHandler()
   
   override
   init(registrar: FlutterPluginRegistrar, name: String) {
@@ -24,11 +26,14 @@ class XyoDeviceChannel: XyoBaseChannel {
     
     onDetectChannel = FlutterEventChannel(name:"\(name)OnDetect", binaryMessenger: registrar.messenger())
     
+    onStatusChannel = FlutterEventChannel(name:"\(name)OnStatus", binaryMessenger: registrar.messenger())
+    
     super.init(registrar: registrar, name: name)
     
     onEnterChannel.setStreamHandler(onEnter)
     onExitChannel.setStreamHandler(onExit)
     onDetectChannel.setStreamHandler(onDetect)
+    onStatusChannel.setStreamHandler(onStatus)
     
     XyoBluetoothDevice.family.enable(enable: true)
     XyoBluetoothDeviceCreator.enable(enable: true)
@@ -54,6 +59,9 @@ class XyoDeviceChannel: XyoBaseChannel {
     case "gattList":
       gattList(call, result:result)
       break
+    case "getStatus":
+      reportStatus(XYBluetoothManager.scanner.currentStatus)
+      break;
     default:
       super.handle(call, result:result)
       break
@@ -81,11 +89,39 @@ class XyoDeviceChannel: XyoBaseChannel {
   private func gattList(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
     GattGroupRequest.process(arguments: call.arguments, result: result)
   }
+  
+  func reportStatus(_ status: XYSmartScanStatus) {
+    var statusString: Any
+    switch(status) {
+    case XYSmartScanStatus.none:
+      statusString = "none"
+      break
+    case XYSmartScanStatus.enabled:
+      statusString = "enabled"
+      break
+    case XYSmartScanStatus.backgroundLocationDisabled:
+      statusString = "locationDisabled"
+      break
+    case XYSmartScanStatus.bluetoothDisabled:
+      statusString = "bluetoothDisabled"
+      break
+    case XYSmartScanStatus.bluetoothUnavailable:
+      statusString = "bluetoothUnavailable"
+      break
+    case XYSmartScanStatus.locationDisabled:
+      statusString = "locationDisabled"
+      break
+    }
+    onStatus.send(event: statusString)
+  }
 }
 
 extension XyoDeviceChannel : XYSmartScanDelegate {
   
-  func smartScan(status: XYSmartScanStatus) {}
+  func smartScan(status: XYSmartScanStatus) {
+    reportStatus(status)
+  }
+  
   func smartScan(location: XYLocationCoordinate2D) {}
   func smartScan(detected device: XYBluetoothDevice, rssi: Int, family: XYDeviceFamily) {
     let buffer = device.toBuffer

@@ -121,6 +121,7 @@ class XyoDeviceChannel(context: Context, val smartScan: XYSmartScan, registrar: 
       "gattSingle" -> gattSingle(call, result)
       "gattGroup" -> gattGroup(call, result)
       "gattList" -> gattList(call, result)
+      "getPublicKey" -> getPublicKey(call, result)
       else -> super.onMethodCall(call, result)
     }
   }
@@ -134,15 +135,33 @@ class XyoDeviceChannel(context: Context, val smartScan: XYSmartScan, registrar: 
   }
 
   private fun gattSingle(call: MethodCall, result: MethodChannel.Result) = GlobalScope.launch {
-    sendResult(result,GattSingleRequest.process(smartScan, call.arguments, result))
+    sendResult(result,GattSingleRequest.process(smartScan, call.arguments, result).await())
   }
 
   private fun gattGroup(call: MethodCall, result: MethodChannel.Result) = GlobalScope.launch {
-    sendResult(result,GattGroupRequest.process(smartScan, call.arguments, result))
+    sendResult(result,GattGroupRequest.process(smartScan, call.arguments, result).await())
   }
 
   private fun gattList(call: MethodCall, result: MethodChannel.Result) = GlobalScope.launch {
-    sendResult(result,GattGroupRequest.process(smartScan, call.arguments, result))
+    sendResult(result,GattGroupRequest.process(smartScan, call.arguments, result).await())
+  }
+
+  private fun argsAsDict(arguments: Any?): Map<String, Any?>? {
+    return arguments as? Map<String, Any?>
+  }
+
+  private fun getPublicKey(call: MethodCall, result: MethodChannel.Result) = GlobalScope.launch {
+    val args = this@XyoDeviceChannel.argsAsDict(call.arguments)
+    val deviceId = args?.get("deviceId") as String?
+    var publicKey = ""
+    if (deviceId != null) {
+      val device = smartScan.devices[args?.get("deviceId")]
+      if (device is XyoSentinelX) {
+        publicKey = device.getPublicKey().await().toString()
+      }
+      publicKey = deviceId
+    }
+    sendResult(result, publicKey)
   }
 
 }

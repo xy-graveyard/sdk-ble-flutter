@@ -54,6 +54,7 @@ class GattDefinedOperationHandler {
                             }
                         }
                         else -> {
+                            result = XYBluetoothResult(false)
                         }
                     }
                     return@connection XYBluetoothResult(true)

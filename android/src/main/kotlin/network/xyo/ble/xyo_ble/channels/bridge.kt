@@ -8,15 +8,17 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import network.xyo.ble.devices.XY4BluetoothDevice
-import network.xyo.ble.devices.XYIBeaconBluetoothDevice
 import network.xyo.ble.flutter.protobuf.BoundWitness
+import network.xyo.ble.gatt.server.XYBluetoothAdvertiser
 import network.xyo.ble.gatt.server.XYBluetoothGattServer
 import network.xyo.ble.scanner.XYSmartScan
 import network.xyo.ble.xyo_ble.InteractionModel
+import network.xyo.modbluetoothkotlin.advertiser.XyoBluetoothAdvertiser
 import network.xyo.modbluetoothkotlin.client.*
 import network.xyo.modbluetoothkotlin.server.XyoBluetoothServer
 import network.xyo.sdkcorekotlin.boundWitness.XyoBoundWitness
 import network.xyo.sdkcorekotlin.node.XyoNodeListener
+import network.xyo.sdkcorekotlin.node.XyoRelayNode
 import network.xyo.sdkobjectmodelkotlin.structure.XyoIterableStructure
 import network.xyo.sdkobjectmodelkotlin.structure.XyoObjectStructure
 import java.util.*
@@ -27,6 +29,8 @@ class XyoBridgeChannel(context: Context, val smartScan: XYSmartScan, registrar: 
 
     private val server = XYBluetoothGattServer(context.applicationContext)
     private val serverHelper = XyoBluetoothServer(server)
+    private val xyAdvertiser = XYBluetoothAdvertiser(context)
+    private lateinit var advertiser: XyoBluetoothAdvertiser
 
     init {
         GlobalScope.launch {
@@ -53,10 +57,21 @@ class XyoBridgeChannel(context: Context, val smartScan: XYSmartScan, registrar: 
         }
     }
 
+    private fun createNewAdvertiser(): XyoBluetoothAdvertiser {
+        return XyoBluetoothAdvertiser(
+                4, //Random().nextInt(Short.MAX_VALUE + 1).toShort(),
+                4, //Random().nextInt(Short.MAX_VALUE + 1).toShort(),
+                xyAdvertiser)
+    }
+
     override fun onStartAsync() = GlobalScope.async {
         smartScan.addListener("bridge", bridgeManager.bridge.scanCallback)
         serverHelper.listener = bridgeManager.bridge.serverCallback
         server.startServer()
+        serverHelper.initServer().await()
+        advertiser = createNewAdvertiser()
+        advertiser.configureAdvertiser()
+        advertiser.startAdvertiser().await()
         if (smartScan.start().await()){
             return@async STATUS_STARTED
         } else {

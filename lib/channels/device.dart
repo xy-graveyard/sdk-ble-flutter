@@ -87,6 +87,10 @@ class XyoDeviceChannel extends MethodChannel {
     return await invokeMethod<bool>('stop');
   }
 
+  Future<String> getPublicKey(BluetoothDevice device) async {
+    return await invokeMethod<String>('getPublicKey');
+  }
+
   /// Run one defined operation on a single device
   Future<GattResponse> defined(BluetoothDevice device, DefinedOperation operation) async {
     final gattOp = GattOperation();
