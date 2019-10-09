@@ -1,13 +1,12 @@
 package network.xyo.ble.xyo_ble
 
-import network.xyo.ble.devices.XYBluetoothDevice
-import android.util.Log
-
 import io.flutter.plugin.common.EventChannel
-import network.xyo.ble.devices.XYFinderBluetoothDevice
-import network.xyo.ble.devices.XYIBeaconBluetoothDevice
+import network.xyo.ble.devices.apple.XYIBeaconBluetoothDevice
+import network.xyo.ble.devices.xy.XYFinderBluetoothDevice
 import network.xyo.ble.flutter.protobuf.Device
+import network.xyo.ble.generic.devices.XYBluetoothDevice
 
+@kotlin.ExperimentalUnsignedTypes
 class SmartScanEventHandler : EventChannel.StreamHandler {
 
   var eventSink: EventChannel.EventSink? = null

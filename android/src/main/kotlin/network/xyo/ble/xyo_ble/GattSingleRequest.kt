@@ -5,10 +5,10 @@ import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import network.xyo.ble.flutter.protobuf.Gatt
-import network.xyo.ble.gatt.peripheral.IXYBluetoothResult
-import network.xyo.ble.gatt.peripheral.XYBluetoothResult
-import network.xyo.ble.scanner.XYSmartScan
+import network.xyo.ble.generic.gatt.peripheral.XYBluetoothResult
+import network.xyo.ble.generic.scanner.XYSmartScan
 
+@kotlin.ExperimentalUnsignedTypes
 class GattSingleRequest: GattRequestHandler() {
 
     companion object {
@@ -18,11 +18,11 @@ class GattSingleRequest: GattRequestHandler() {
                 val device = smartScan.devices[operation.deviceId] ?: return@async false
 
                 val response: Gatt.GattResponse?
-                var bleResult: IXYBluetoothResult?= null
+                var bleResult: XYBluetoothResult<Any>?= null
                 device.connection {
-                    bleResult = runCall(device, operation).await()
+                    bleResult = runCall(device, operation)
                     return@connection XYBluetoothResult(true)
-                }.await()
+                }
                 response = response(operation, bleResult)
                 relayResponse(response, result)
                 cleanup(device, operation)

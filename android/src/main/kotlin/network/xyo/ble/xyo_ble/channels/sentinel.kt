@@ -7,12 +7,13 @@ import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.PluginRegistry
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
-import network.xyo.ble.devices.XY4BluetoothDevice
-import network.xyo.ble.devices.XYBluetoothDevice
-import network.xyo.ble.devices.XYIBeaconBluetoothDevice
-import network.xyo.ble.scanner.XYSmartScan
+import network.xyo.ble.devices.apple.XYIBeaconBluetoothDevice
+import network.xyo.ble.devices.xy.XY4BluetoothDevice
+import network.xyo.ble.generic.devices.XYBluetoothDevice
+import network.xyo.ble.generic.scanner.XYSmartScan
 import network.xyo.modbluetoothkotlin.client.*
 
+@kotlin.ExperimentalUnsignedTypes
 class XyoSentinelChannel(context: Context, val smartScan: XYSmartScan, registrar: PluginRegistry.Registrar, name: String): XyoNodeChannel(context, registrar, name) {
 
   init {
@@ -31,11 +32,31 @@ class XyoSentinelChannel(context: Context, val smartScan: XYSmartScan, registrar
     }
   }
 
-  override fun onStartAsync() = GlobalScope.async {
+  fun updateStatus(status: XYSmartScan.Status? = null) {
+    val newStatus = status ?: smartScan.status
+    this@XyoSentinelChannel.status = when (newStatus) {
+      XYSmartScan.Status.Enabled ->
+        if (smartScan.started())
+          XyoNodeChannelStatus.Started
+        else
+          XyoNodeChannelStatus.Stopped
+      XYSmartScan.Status.BluetoothDisabled ->
+        XyoNodeChannelStatus.Unavailable
+      XYSmartScan.Status.LocationDisabled ->
+        XyoNodeChannelStatus.Unavailable
+      XYSmartScan.Status.BluetoothUnavailable ->
+        XyoNodeChannelStatus.Unavailable
+      else ->
+        XyoNodeChannelStatus.Stopped
+    }
+  }
+
+  override suspend fun onStart(): XyoNodeChannelStatus {
     smartScan.addListener("sentinel", object: XYSmartScan.Listener() {
       override fun statusChanged(status: XYSmartScan.Status) {
-        Log.i("sentinel", "statusChanged: ${status}")
+        Log.i("sentinel", "statusChanged: $status")
         super.statusChanged(status)
+        updateStatus(status)
       }
 
       override fun detected(device: XYBluetoothDevice) {
@@ -43,19 +64,15 @@ class XyoSentinelChannel(context: Context, val smartScan: XYSmartScan, registrar
         super.detected(device)
       }
     })
-    if (smartScan.start().await()) {
-      return@async STATUS_STARTED
-    } else {
-      return@async STATUS_STOPPED
-    }
+    smartScan.start()
+    updateStatus()
+    return status
   }
 
-  override fun onStopAsync() = GlobalScope.async {
+  override suspend fun onStop(): XyoNodeChannelStatus {
+    smartScan.stop()
+    updateStatus()
     smartScan.removeListener("sentinel")
-    if (smartScan.stop().await()) {
-      return@async STATUS_STOPPED
-    } else {
-      return@async STATUS_STARTED
-    }
+    return status
   }
 }

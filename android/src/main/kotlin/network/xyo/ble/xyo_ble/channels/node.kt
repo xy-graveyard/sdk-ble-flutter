@@ -8,53 +8,57 @@ import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import network.xyo.ble.generic.scanner.XYSmartScan
 import network.xyo.ble.xyo_ble.BridgeManager
 
+enum class XyoNodeChannelStatus {
+  None,
+  Started,
+  Stopped,
+  Unavailable
+}
+
+@kotlin.ExperimentalUnsignedTypes
 open class XyoNodeChannel(context: Context, registrar: PluginRegistry.Registrar, name: String): XyoBaseChannel(registrar, name) {
 
   protected val bridgeManager = BridgeManager(context)
-  protected var status = STATUS_STOPPED
+  protected var status = XyoNodeChannelStatus.None
 
   override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
     when (call.method) {
-      "start" -> start(call, result)
-      "stop" -> stop(call, result)
-      "getPublicKey" -> getPublicKey(call, result)
-      "getStatus" -> getStatus(call, result)
+      "start" -> GlobalScope.launch { start(result) }
+      "stop" -> GlobalScope.launch { stop(result) }
+      "getPublicKey" -> getPublicKey(result)
+      "getStatus" -> getStatus(result)
       else -> super.onMethodCall(call, result)
     }
   }
 
   //this should return the new running state
-  open fun onStartAsync() = GlobalScope.async {
-    return@async STATUS_STARTED
+  open suspend fun onStart(): XyoNodeChannelStatus {
+    return status
   }
 
   //this should return the new running state
-  open fun onStopAsync() = GlobalScope.async {
-    return@async STATUS_STOPPED
+  open suspend fun onStop(): XyoNodeChannelStatus {
+    return status
   }
 
-  private fun getStatus(call: MethodCall, result: MethodChannel.Result) = GlobalScope.launch {
-    sendResult(result, status)
+  private fun getStatus(result: MethodChannel.Result) {
+    sendResult(result, status.name)
   }
 
-  private fun start(call: MethodCall, result: MethodChannel.Result) = GlobalScope.launch {
-    status = onStartAsync().await()
-    sendResult(result, status)
+  private suspend fun start(result: MethodChannel.Result) {
+    status = onStart()
+    sendResult(result, status.name)
   }
 
-  private fun stop(call: MethodCall, result: MethodChannel.Result) = GlobalScope.launch {
-    status = onStopAsync().await()
-    sendResult(result, status)
+  private suspend fun stop(result: MethodChannel.Result) {
+    status = onStop()
+    sendResult(result, status.name)
   }
 
-  private fun getPublicKey(call: MethodCall, result: MethodChannel.Result) = GlobalScope.launch {
+  private fun getPublicKey(result: MethodChannel.Result) {
     sendResult(result, bridgeManager.getPrimaryPublicKeyAsString())
-  }
-
-  companion object {
-    const val STATUS_STARTED = "started"
-    const val STATUS_STOPPED = "stopped"
   }
 }

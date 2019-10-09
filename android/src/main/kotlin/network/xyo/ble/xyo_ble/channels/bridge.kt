@@ -7,18 +7,17 @@ import io.flutter.plugin.common.PluginRegistry
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
-import network.xyo.ble.devices.XY4BluetoothDevice
+import network.xyo.ble.devices.xy.XY4BluetoothDevice
 import network.xyo.ble.flutter.protobuf.BoundWitness
-import network.xyo.ble.gatt.server.XYBluetoothAdvertiser
-import network.xyo.ble.gatt.server.XYBluetoothGattServer
-import network.xyo.ble.scanner.XYSmartScan
+import network.xyo.ble.generic.gatt.server.XYBluetoothAdvertiser
+import network.xyo.ble.generic.gatt.server.XYBluetoothGattServer
+import network.xyo.ble.generic.scanner.XYSmartScan
 import network.xyo.ble.xyo_ble.InteractionModel
 import network.xyo.modbluetoothkotlin.advertiser.XyoBluetoothAdvertiser
 import network.xyo.modbluetoothkotlin.client.*
 import network.xyo.modbluetoothkotlin.server.XyoBluetoothServer
 import network.xyo.sdkcorekotlin.boundWitness.XyoBoundWitness
 import network.xyo.sdkcorekotlin.node.XyoNodeListener
-import network.xyo.sdkcorekotlin.node.XyoRelayNode
 import network.xyo.sdkobjectmodelkotlin.structure.XyoIterableStructure
 import network.xyo.sdkobjectmodelkotlin.structure.XyoObjectStructure
 import java.util.*
@@ -59,35 +58,28 @@ class XyoBridgeChannel(context: Context, val smartScan: XYSmartScan, registrar: 
 
     private fun createNewAdvertiser(): XyoBluetoothAdvertiser {
         return XyoBluetoothAdvertiser(
-                4, //Random().nextInt(Short.MAX_VALUE + 1).toShort(),
-                4, //Random().nextInt(Short.MAX_VALUE + 1).toShort(),
+                Random().nextInt(Short.MAX_VALUE + 1).toUShort(),
+                Random().nextInt(Short.MAX_VALUE + 1).toUShort(),
                 xyAdvertiser)
     }
 
-    override fun onStartAsync() = GlobalScope.async {
+    override suspend fun onStart(): XyoNodeChannelStatus {
         smartScan.addListener("bridge", bridgeManager.bridge.scanCallback)
         serverHelper.listener = bridgeManager.bridge.serverCallback
         server.startServer()
-        serverHelper.initServer().await()
+        serverHelper.initServer()
         advertiser = createNewAdvertiser()
         advertiser.configureAdvertiser()
-        advertiser.startAdvertiser().await()
-        if (smartScan.start().await()){
-            return@async STATUS_STARTED
-        } else {
-            return@async STATUS_STOPPED
-        }
+        advertiser.startAdvertiser()
+        smartScan.start()
+        return status
     }
 
-    override fun onStopAsync() = GlobalScope.async {
+    override suspend fun onStop(): XyoNodeChannelStatus {
         smartScan.removeListener("bridge")
         serverHelper.listener = null
         server.stopServer()
-        if (smartScan.stop().await()){
-            return@async STATUS_STOPPED
-        } else {
-            return@async STATUS_STARTED
-        }
+        return status
     }
 
     private fun setArchivists(call: MethodCall, result: MethodChannel.Result) = GlobalScope.launch {

@@ -4,11 +4,11 @@ import android.content.Context
 import io.flutter.plugin.common.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import network.xyo.ble.devices.XY4BluetoothDevice
-import network.xyo.ble.devices.XYBluetoothDevice
-import network.xyo.ble.devices.XYIBeaconBluetoothDevice
+import network.xyo.ble.devices.apple.XYIBeaconBluetoothDevice
+import network.xyo.ble.devices.xy.XY4BluetoothDevice
 import network.xyo.ble.flutter.protobuf.Device
-import network.xyo.ble.scanner.XYSmartScan
+import network.xyo.ble.generic.devices.XYBluetoothDevice
+import network.xyo.ble.generic.scanner.XYSmartScan
 import network.xyo.ble.xyo_ble.GattGroupRequest
 import network.xyo.ble.xyo_ble.GattSingleRequest
 import network.xyo.modbluetoothkotlin.client.XyoBluetoothClient
@@ -17,6 +17,7 @@ import network.xyo.modbluetoothkotlin.client.XyoBridgeX
 import network.xyo.modbluetoothkotlin.client.XyoAndroidAppX
 import network.xyo.modbluetoothkotlin.client.XyoIosAppX
 
+@kotlin.ExperimentalUnsignedTypes
 class XyoDeviceChannel(context: Context, val smartScan: XYSmartScan, registrar: PluginRegistry.Registrar, name: String): XyoBaseChannel(registrar, name) {
 
   private val listener = object: XYSmartScan.Listener() {
@@ -102,7 +103,9 @@ class XyoDeviceChannel(context: Context, val smartScan: XYSmartScan, registrar: 
     XyoSentinelX.enable(true)
     XY4BluetoothDevice.enable(true)
     smartScan.addListener("device", listener)
-    smartScan.start()
+    GlobalScope.launch {
+      smartScan.start()
+    }
   }
 
   override fun initializeChannels() {
@@ -139,11 +142,11 @@ class XyoDeviceChannel(context: Context, val smartScan: XYSmartScan, registrar: 
   }
 
   private fun gattGroup(call: MethodCall, result: MethodChannel.Result) = GlobalScope.launch {
-    sendResult(result,GattGroupRequest.process(smartScan, call.arguments, result).await())
+    sendResult(result,GattGroupRequest.process(smartScan, call.arguments, result))
   }
 
   private fun gattList(call: MethodCall, result: MethodChannel.Result) = GlobalScope.launch {
-    sendResult(result,GattGroupRequest.process(smartScan, call.arguments, result).await())
+    sendResult(result,GattGroupRequest.process(smartScan, call.arguments, result))
   }
 
   private fun argsAsDict(arguments: Any?): Map<String, Any?>? {
@@ -157,7 +160,7 @@ class XyoDeviceChannel(context: Context, val smartScan: XYSmartScan, registrar: 
     if (deviceId != null) {
       val device = smartScan.devices[args?.get("deviceId")]
       if (device is XyoSentinelX) {
-        publicKey = device.getPublicKey().await().toString()
+        publicKey = device.getPublicKey().toString()
       }
       publicKey = deviceId
     }

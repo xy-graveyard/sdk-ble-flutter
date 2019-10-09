@@ -1,13 +1,9 @@
 package network.xyo.ble.xyo_ble
 
-import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
-import network.xyo.ble.devices.XYBluetoothDevice
-import network.xyo.ble.devices.XYFinderBluetoothDevice
+import network.xyo.ble.devices.xy.XYFinderBluetoothDevice
 import network.xyo.ble.flutter.protobuf.Gatt
-import network.xyo.ble.gatt.peripheral.IXYBluetoothResult
-import network.xyo.ble.gatt.peripheral.XYBluetoothResult
+import network.xyo.ble.generic.devices.XYBluetoothDevice
+import network.xyo.ble.generic.gatt.peripheral.XYBluetoothResult
 import network.xyo.modbluetoothkotlin.client.XyoSentinelX
 
 class GattDefinedOperationHandler {
@@ -15,37 +11,48 @@ class GattDefinedOperationHandler {
     companion object {
         // Run the operations
         @kotlin.ExperimentalUnsignedTypes
-        fun process(device: XYBluetoothDevice, operation: Gatt.DefinedOperation): Deferred<IXYBluetoothResult?> {
-            return GlobalScope.async {
+        suspend fun process(device: XYBluetoothDevice, operation: Gatt.DefinedOperation): XYBluetoothResult<Any>? {
                 val finder = device as? XYFinderBluetoothDevice
                 val sentinelX = device as? XyoSentinelX
-                var result: IXYBluetoothResult? = null
+                var result: XYBluetoothResult<Any>? = null
                 device.connection {
                     when (operation) {
                         Gatt.DefinedOperation.SONG -> {
-                            finder?.unlock()?.await()
-                            result = finder?.find()?.await()
+                            finder?.unlock()
+                            finder?.find()?.let {
+                                result = XYBluetoothResult(it.value, it.error)
+                            }
                         }
                         Gatt.DefinedOperation.STOP_SONG -> {
-                            finder?.unlock()?.await()
-                            result = finder?.stopFind()?.await()
+                            finder?.unlock()
+                            finder?.stopFind()?.let {
+                                result = XYBluetoothResult(it.value, it.error)
+                            }
                         }
                         Gatt.DefinedOperation.STAY_AWAKE -> {
-                            finder?.unlock()?.await()
-                            result = finder?.stayAwake()?.await()
+                            finder?.unlock()
+                            finder?.stayAwake()?.let {
+                                result = XYBluetoothResult(it.value, it.error)
+                            }
                         }
                         Gatt.DefinedOperation.GO_TO_SLEEP -> {
-                            finder?.unlock()?.await()
-                            result = finder?.fallAsleep()?.await()
+                            finder?.unlock()
+                            finder?.fallAsleep()?.let {
+                                result = XYBluetoothResult(it.value, it.error)
+                            }
                         }
                         Gatt.DefinedOperation.LOCK -> {
-                            result = finder?.lock()?.await()
+                            finder?.lock()?.let {
+                                result = XYBluetoothResult(it.value, it.error)
+                            }
                         }
                         Gatt.DefinedOperation.UNLOCK -> {
-                            result = finder?.lock()?.await()
+                            finder?.lock()?.let {
+                                result = XYBluetoothResult(it.value, it.error)
+                            }
                         }
                         Gatt.DefinedOperation.PUBLIC_KEY -> {
-                            val key = sentinelX?.getPublicKey()?.await()
+                            val key = sentinelX?.getPublicKey()
                             val value = key?.value
                             if (value != null) {
                                 result = XYBluetoothResult(value.toBase58String())
@@ -58,9 +65,8 @@ class GattDefinedOperationHandler {
                         }
                     }
                     return@connection XYBluetoothResult(true)
-                }.await()
-                return@async result
-            }
+                }
+                return result
         }
     }
 }
