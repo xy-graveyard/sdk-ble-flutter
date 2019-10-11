@@ -118,7 +118,7 @@ class BridgeManager (context: Context) {
 
     fun setPaymentKeyAsync(key: ByteArray): Deferred<Unit> = GlobalScope.async {
         val encodedKey = XyoObjectStructure.newInstance(XyoSchemas.PAYMENT_KEY, key)
-        stateRepo.setStatics(arrayOf(encodedKey))
+        stateRepo.setStaticHeuristics(arrayOf(encodedKey))
     }
 
     private fun getSignerAsync(): Deferred<XyoSigner> = GlobalScope.async {

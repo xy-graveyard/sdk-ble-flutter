@@ -22,15 +22,7 @@ class XyoDeviceChannel(context: Context, val smartScan: XYSmartScan, registrar: 
 
   private val listener = object: XYSmartScan.Listener() {
     override fun statusChanged(status: XYSmartScan.Status) {
-      val statusString = when(status) {
-        XYSmartScan.Status.None -> "none"
-        XYSmartScan.Status.Enabled -> "enabled"
-        XYSmartScan.Status.BluetoothDisabled -> "bluetoothDisabled"
-        XYSmartScan.Status.BluetoothUnavailable -> "bluetoothUnavailable"
-        XYSmartScan.Status.LocationDisabled -> "locationDisabled"
-        else -> "unknown"
-      }
-      onStatus.send(statusString)
+      onStatus.send(status.name)
       super.statusChanged(status)
     }
 

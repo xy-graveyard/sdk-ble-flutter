@@ -52,6 +52,7 @@ class XyoBridgeChannel(context: Context, val smartScan: XYSmartScan, registrar: 
             "getLastBlock" -> getLastBlock(call, result)
             "selfSign" -> selfSign(call, result)
             "getBlocks" -> getBlocks(call, result)
+            "initiateBoundWitness" -> initiateBoundWitness(call, result)
             else -> super.onMethodCall(call, result)
         }
     }
@@ -72,6 +73,7 @@ class XyoBridgeChannel(context: Context, val smartScan: XYSmartScan, registrar: 
         advertiser.configureAdvertiser()
         advertiser.startAdvertiser()
         smartScan.start()
+        status = XyoNodeChannelStatus.Started
         return status
     }
 
@@ -79,6 +81,7 @@ class XyoBridgeChannel(context: Context, val smartScan: XYSmartScan, registrar: 
         smartScan.removeListener("bridge")
         serverHelper.listener = null
         server.stopServer()
+        status = XyoNodeChannelStatus.Stopped
         return status
     }
 
@@ -91,6 +94,16 @@ class XyoBridgeChannel(context: Context, val smartScan: XYSmartScan, registrar: 
 
         //now that we have a new last block
         getLastBlock(call, result)
+    }
+
+    private fun initiateBoundWitness(call: MethodCall, result: MethodChannel.Result) = GlobalScope.launch {
+        val deviceId = (call.arguments as? Map<String, Any?>)?.get("deviceId") as? String
+        deviceId?.let {
+            val device = smartScan.deviceFromId(it) as? XyoBluetoothClient
+            device?.let {
+                bridgeManager.bridge.tryBoundWitnessWithDevice(device)
+            }
+        }
     }
 
     private fun getBlockCount(call: MethodCall, result: MethodChannel.Result) = GlobalScope.launch {

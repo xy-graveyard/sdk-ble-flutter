@@ -18,4 +18,10 @@ class XyoBridgeChannel extends XyoNodeChannel {
   Future<DeviceBoundWitness> selfSign() async {
     return DeviceBoundWitness.fromBuffer(await invokeMethod('selfSign'));
   }
+
+  Future<DeviceBoundWitness> initiateBoundWitness(String deviceId) async {
+    return DeviceBoundWitness.fromBuffer(await invokeMethod('initiateBoundWitness', <String, dynamic>{
+      'deviceId': deviceId,
+    }));
+  }
 }
