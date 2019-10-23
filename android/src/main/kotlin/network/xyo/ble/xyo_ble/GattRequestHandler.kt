@@ -12,20 +12,20 @@ open class GattRequestHandler {
 
     companion object {
 
-        fun argsAsDict(arguments: Any?): Map<String, Any?>? {
-            return arguments as? Map<String, Any?>
+        fun argsAsDict(arguments: Any?): Map<String, Any> {
+            return (arguments as? Map<String, Any>) ?: emptyMap()
         }
 
         fun operations(arguments: Any?): Gatt.GattOperationList? {
             val args = this.argsAsDict(arguments)
-            val data = args?.get("request") as? ByteArray ?: return null
+            val data = args["request"] as? ByteArray ?: return null
             return Gatt.GattOperationList.parseFrom(data)
         }
 
         // Used to unpack a single gatt request
         fun operation(arguments: Any?): Gatt.GattOperation? {
             val args = this.argsAsDict(arguments)
-            val data = args?.get("request") as? ByteArray ?: return null
+            val data = args["request"] as? ByteArray ?: return null
             return Gatt.GattOperation.parseFrom(data)
         }
 

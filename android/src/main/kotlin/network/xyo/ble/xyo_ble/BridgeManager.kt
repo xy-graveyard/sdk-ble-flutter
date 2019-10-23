@@ -25,8 +25,6 @@ import network.xyo.sdkobjectmodelkotlin.structure.XyoObjectStructure
 import java.io.IOException
 import java.net.Socket
 import java.nio.ByteBuffer
-import kotlin.reflect.jvm.internal.impl.load.kotlin.JvmType
-
 
 @kotlin.ExperimentalUnsignedTypes
 class BridgeManager (context: Context) {
