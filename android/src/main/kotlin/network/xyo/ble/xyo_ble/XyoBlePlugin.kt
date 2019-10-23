@@ -1,8 +1,8 @@
 package network.xyo.ble.xyo_ble
 
 import io.flutter.plugin.common.PluginRegistry.Registrar
-import network.xyo.ble.scanner.XYSmartScan
-import network.xyo.ble.scanner.XYSmartScanModern
+import network.xyo.ble.generic.scanner.XYSmartScan
+import network.xyo.ble.generic.scanner.XYSmartScanModern
 import network.xyo.ble.xyo_ble.channels.*
 
 @kotlin.ExperimentalUnsignedTypes

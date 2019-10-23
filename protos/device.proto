@@ -31,4 +31,6 @@ message BluetoothDevice {
     sint64 rssi = 4;
     Range range = 5;
     bool connected = 6;
+    string name = 7;
+    string address = 8;
 }

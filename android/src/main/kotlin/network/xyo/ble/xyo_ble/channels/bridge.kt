@@ -7,14 +7,14 @@ import io.flutter.plugin.common.PluginRegistry
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
-import network.xyo.ble.devices.XY4BluetoothDevice
-import network.xyo.ble.devices.XYIBeaconBluetoothDevice
+import network.xyo.ble.devices.xy.XY4BluetoothDevice
 import network.xyo.ble.flutter.protobuf.BoundWitness
-import network.xyo.ble.gatt.server.XYBluetoothGattServer
-import network.xyo.ble.scanner.XYSmartScan
+import network.xyo.ble.generic.gatt.server.XYBluetoothAdvertiser
+import network.xyo.ble.generic.gatt.server.XYBluetoothGattServer
+import network.xyo.ble.generic.scanner.XYSmartScan
 import network.xyo.ble.xyo_ble.InteractionModel
-import network.xyo.modbluetoothkotlin.client.XyoBluetoothClient
-import network.xyo.modbluetoothkotlin.client.XyoSentinelX
+import network.xyo.modbluetoothkotlin.advertiser.XyoBluetoothAdvertiser
+import network.xyo.modbluetoothkotlin.client.*
 import network.xyo.modbluetoothkotlin.server.XyoBluetoothServer
 import network.xyo.sdkcorekotlin.boundWitness.XyoBoundWitness
 import network.xyo.sdkcorekotlin.node.XyoNodeListener
@@ -28,6 +28,8 @@ class XyoBridgeChannel(context: Context, val smartScan: XYSmartScan, registrar: 
 
     private val server = XYBluetoothGattServer(context.applicationContext)
     private val serverHelper = XyoBluetoothServer(server)
+    private val xyAdvertiser = XYBluetoothAdvertiser(context)
+    private lateinit var advertiser: XyoBluetoothAdvertiser
 
     init {
         GlobalScope.launch {
@@ -35,9 +37,11 @@ class XyoBridgeChannel(context: Context, val smartScan: XYSmartScan, registrar: 
             bridgeManager.bridge.addListener("bridge", onBoundWitness)
         }
 
-        XYIBeaconBluetoothDevice.enable(true)
-        XyoBluetoothClient.enable(true)
         XyoSentinelX.enable(true)
+        XyoBridgeX.enable(true)
+        XyoIosAppX.enable(true)
+        XyoAndroidAppX.enable(true)
+        XyoBluetoothClient.enable(true)
         XY4BluetoothDevice.enable(true)
     }
 
@@ -48,30 +52,37 @@ class XyoBridgeChannel(context: Context, val smartScan: XYSmartScan, registrar: 
             "getLastBlock" -> getLastBlock(call, result)
             "selfSign" -> selfSign(call, result)
             "getBlocks" -> getBlocks(call, result)
+            "initiateBoundWitness" -> initiateBoundWitness(call, result)
             else -> super.onMethodCall(call, result)
         }
     }
 
-    override fun onStartAsync() = GlobalScope.async {
+    private fun createNewAdvertiser(): XyoBluetoothAdvertiser {
+        return XyoBluetoothAdvertiser(
+                Random().nextInt(Short.MAX_VALUE + 1).toUShort(),
+                Random().nextInt(Short.MAX_VALUE + 1).toUShort(),
+                xyAdvertiser)
+    }
+
+    override suspend fun onStart(): XyoNodeChannelStatus {
         smartScan.addListener("bridge", bridgeManager.bridge.scanCallback)
         serverHelper.listener = bridgeManager.bridge.serverCallback
         server.startServer()
-        if (smartScan.start().await()){
-            return@async STATUS_STARTED
-        } else {
-            return@async STATUS_STOPPED
-        }
+        serverHelper.initServer()
+        advertiser = createNewAdvertiser()
+        advertiser.configureAdvertiser()
+        advertiser.startAdvertiser()
+        smartScan.start()
+        status = XyoNodeChannelStatus.Started
+        return status
     }
 
-    override fun onStopAsync() = GlobalScope.async {
+    override suspend fun onStop(): XyoNodeChannelStatus {
         smartScan.removeListener("bridge")
         serverHelper.listener = null
         server.stopServer()
-        if (smartScan.stop().await()){
-            return@async STATUS_STOPPED
-        } else {
-            return@async STATUS_STARTED
-        }
+        status = XyoNodeChannelStatus.Stopped
+        return status
     }
 
     private fun setArchivists(call: MethodCall, result: MethodChannel.Result) = GlobalScope.launch {
@@ -83,6 +94,16 @@ class XyoBridgeChannel(context: Context, val smartScan: XYSmartScan, registrar: 
 
         //now that we have a new last block
         getLastBlock(call, result)
+    }
+
+    private fun initiateBoundWitness(call: MethodCall, result: MethodChannel.Result) = GlobalScope.launch {
+        val deviceId = (call.arguments as? Map<String, Any?>)?.get("deviceId") as? String
+        deviceId?.let {
+            val device = smartScan.deviceFromId(it) as? XyoBluetoothClient
+            device?.let {
+                bridgeManager.bridge.tryBoundWitnessWithDevice(device)
+            }
+        }
     }
 
     private fun getBlockCount(call: MethodCall, result: MethodChannel.Result) = GlobalScope.launch {

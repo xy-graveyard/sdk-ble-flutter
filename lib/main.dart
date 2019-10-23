@@ -7,6 +7,6 @@ export 'package:sdk_ble_flutter/protos/bound_witness.pb.dart';
 
 class XyoSdk {
   static final device = XyoDeviceChannel('network.xyo/device');
-  static final sentinel = XyoSentinelChannel ('network.xyo/sentinel');
-  static final bridge = XyoBridgeChannel ('network.xyo/bridge');
+  static final sentinel = XyoSentinelChannel('network.xyo/sentinel');
+  static final bridge = XyoBridgeChannel('network.xyo/bridge');
 }

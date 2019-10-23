@@ -5,10 +5,25 @@ import sdk_xyobleinterface_swift
 import sdk_core_swift
 
 extension XYBluetoothDevice {
+  
+  func getNameFromType() -> String {
+    var name = self.name
+    if (self is XyoSentinelXDevice) {
+      name = "SenX"
+    } else if (self is XyoBridgeXDevice) {
+      name = "BridgeX"
+    } else if (self is XyoIosXDevice) {
+      name = "IosAppX"
+    } else if (self is XyoAndroidXDevice) {
+      name = "AndroidAppX"
+    }
+    return name
+  }
 
     var toBuffer: BluetoothDevice {
-        return BluetoothDevice.with {
+        var result = BluetoothDevice.with {
             $0.id = self.id
+            $0.name = getNameFromType()
             $0.family = self.family.toBuffer
             $0.connected = self.connected
             $0.rssi = Int64(self.rssi)
@@ -16,6 +31,8 @@ extension XYBluetoothDevice {
                 $0.beacon = beacon
             }
         }
+      result.family.name = result.name
+      return result
     }
 
 }
@@ -77,7 +94,6 @@ internal class SmartScanWrapper {
 
     fileprivate(set) var xyFinderFamilyFilter: [XYDeviceFamily]
 
-    fileprivate let central = XYCentral.instance
     fileprivate let smartScan = XYSmartScan.instance
 
     let scannerHandler = ScannerEventChannel()
@@ -96,24 +112,8 @@ internal class SmartScanWrapper {
     }
 
     func setup() {
-        self.central.setDelegate(self, key: "SmartScanWrapper")
-        self.central.enable()
-    }
-
-}
-
-extension SmartScanWrapper: XYCentralDelegate {
-
-    func located(peripheral: XYPeripheral) {}
-    func connected(peripheral: XYPeripheral) {}
-    func timeout() {}
-    func couldNotConnect(peripheral: XYPeripheral) {}
-    func disconnected(periperhal: XYPeripheral) {}
-    func stateChanged(newState: CBManagerState) {
-        self.central.removeDelegate(for: "SmartScanWrapper")
         self.smartScan.setDelegate(self, key: "SmartScanWrapper")
-
-        self.smartScan.start(for: self.xyFinderFamilyFilter, mode: .foreground)
+      self.smartScan.start(mode: XYSmartScanMode.foreground)
     }
 
 }
@@ -123,7 +123,7 @@ extension SmartScanWrapper: XYSmartScanDelegate {
     func smartScan(status: XYSmartScanStatus) {}
     func smartScan(location: XYLocationCoordinate2D) {}
 
-    func smartScan(detected device: XYBluetoothDevice, signalStrength: Int, family: XYDeviceFamily) {
+    func smartScan(detected device: XYBluetoothDevice, rssi: Int, family: XYDeviceFamily) {
         self.scannerHandler.sendMessage(device)
     }
 

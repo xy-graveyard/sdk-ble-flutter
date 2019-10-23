@@ -41,6 +41,8 @@ const BluetoothDevice$json = const {
     const {'1': 'rssi', '3': 4, '4': 1, '5': 18, '10': 'rssi'},
     const {'1': 'range', '3': 5, '4': 1, '5': 11, '6': '.Range', '10': 'range'},
     const {'1': 'connected', '3': 6, '4': 1, '5': 8, '10': 'connected'},
+    const {'1': 'name', '3': 7, '4': 1, '5': 9, '10': 'name'},
+    const {'1': 'address', '3': 8, '4': 1, '5': 9, '10': 'address'},
   ],
 };
 
