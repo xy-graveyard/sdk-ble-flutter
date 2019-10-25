@@ -97,12 +97,19 @@ class XyoBridgeChannel(context: Context, val smartScan: XYSmartScan, registrar: 
     }
 
     private fun initiateBoundWitness(call: MethodCall, result: MethodChannel.Result) = GlobalScope.launch {
+        var didInitiate = false
         val deviceId = (call.arguments as? Map<String, Any?>)?.get("deviceId") as? String
         deviceId?.let {
             val device = smartScan.deviceFromId(it) as? XyoBluetoothClient
             device?.let {
                 bridgeManager.bridge.tryBoundWitnessWithDevice(device)
+                didInitiate = true
             }
+        }
+        if (didInitiate) {
+            sendResult(result, true)
+        } else {
+            sendError(result, "Not Found", "Device not found for connection")
         }
     }
 

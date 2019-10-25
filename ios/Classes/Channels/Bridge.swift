@@ -1,6 +1,8 @@
 import sdk_core_swift
 import sdk_bletcpbridge_swift
 import sdk_objectmodel_swift
+import sdk_xyobleinterface_swift
+import XyBleSdk
 
 class XyoBridgeChannel: XyoNodeChannel {
     
@@ -29,6 +31,9 @@ class XyoBridgeChannel: XyoNodeChannel {
         break
       case "selfSign":
         selfSign(call, result: result)
+        break
+      case "initiateBoundWitness":
+        initiateBoundWitness(call, result: result)
         break
       default:
         super.handle(call, result: result)
@@ -63,6 +68,37 @@ class XyoBridgeChannel: XyoNodeChannel {
 
     //now that we have a new last block
     getLastBlock(call, result:result)
+  }
+  
+  private func findDevice(_ deviceId: String) -> XyoBluetoothDevice? {
+    var foundDevice: XyoBluetoothDevice?
+    XYBluetoothDeviceFactory.devices.forEach { device in
+      if (device.id == deviceId) {
+        foundDevice = device as? XyoBluetoothDevice
+      }
+    }
+    return foundDevice
+  }
+  
+  private func initiateBoundWitness(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+    
+    guard
+      let arguments = call.arguments as? Dictionary<String, Any>,
+      let deviceId = arguments["deviceId"] as? String
+    else {
+      result(FlutterError(code: "Exception", message: "Excception", details:"DeviceId Invalid Type"))
+      return
+    }
+    
+    guard
+      let device = findDevice(deviceId)
+    else {
+        result(FlutterError(code: "Exception", message: "Excception", details:"Device not Found"))
+        return
+    }
+    
+    BridgeManager.instance.bridge.collect(bleDevice: device)
+    result(true)
   }
 
   private func getBlockCount(_ call: FlutterMethodCall, result: @escaping FlutterResult) throws {

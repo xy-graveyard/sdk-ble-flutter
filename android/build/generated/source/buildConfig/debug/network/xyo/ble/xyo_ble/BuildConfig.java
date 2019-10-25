@@ -5,6 +5,11 @@ package network.xyo.ble.xyo_ble;
 
 public final class BuildConfig {
   public static final boolean DEBUG = Boolean.parseBoolean("true");
+  public static final String LIBRARY_PACKAGE_NAME = "network.xyo.ble.xyo_ble";
+  /**
+   * @deprecated APPLICATION_ID is misleading in libraries. For the library package name use LIBRARY_PACKAGE_NAME
+   */
+  @Deprecated
   public static final String APPLICATION_ID = "network.xyo.ble.xyo_ble";
   public static final String BUILD_TYPE = "debug";
   public static final String FLAVOR = "";
