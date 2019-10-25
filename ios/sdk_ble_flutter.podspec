@@ -20,8 +20,8 @@ Pod::Spec.new do |s|
   s.dependency 'Flutter'
   s.dependency 'XyBleSdk', '~> 3.0.6'
   s.dependency 'SwiftProtobuf', '~> 1.5'
-  s.dependency 'sdk-bletcpbridge-swift', '~> 3.0'
-  s.dependency 'sdk-xyobleinterface-swift', '~> 3.0.5'
+  s.dependency 'sdk-bletcpbridge-swift', '~> 3.0.7'
+  s.dependency 'sdk-xyobleinterface-swift', '~> 3.0.7'
   s.dependency 'sdk-core-swift', '~> 3.0.1'
   s.dependency 'sdk-objectmodel-swift', '~> 3.0.1'
 
