@@ -15,6 +15,7 @@ jobs:
         id: cache
         with:
           path: $GITHUB_WORKSPACE/example/android/.gradle
+          key: ${{ runner.os }}-${{ hashFiles('**/lockfiles') }}
       - name: pre build
         run: |
           wget http://services.gradle.org/distributions/gradle-3.5-bin.zip
