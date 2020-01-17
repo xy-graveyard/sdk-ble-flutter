@@ -1,0 +1,28 @@
+name: iOS build ci
+
+on:
+  push:
+    branches-ignore:
+      - "master"
+
+jobs:
+  build:
+    runs-on: macOS-latest
+    strategy:
+      matrix:
+        destination: ["platform=iOS Simulator,OS=latest,name=iPhone11"]
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build
+        env:
+          destination: ${{ matrix.destination }}
+        run: |
+          gem install cocoapods-acknowledgements
+          gem install cocoapods
+          pod repo update
+          pip install six
+          git clone https://github.com/flutter/flutter.git --depth 1 -b beta
+          $GITHUB_WORKSPACE/flutter/bin/flutter doctor
+          cd $GITHUB_WORKSPACE/example
+          $GITHUB_WORKSPACE/flutter/bin/flutter build ios --no-codesign
