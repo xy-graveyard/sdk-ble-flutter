@@ -1,4 +1,4 @@
-name: iOS build ci
+name: iOS build
 
 on:
   push:
@@ -8,15 +8,10 @@ on:
 jobs:
   build:
     runs-on: macOS-latest
-    strategy:
-      matrix:
-        destination: ["platform=iOS Simulator,OS=latest,name=iPhone11"]
 
     steps:
       - uses: actions/checkout@v2
-      - name: pre build
-        env:
-          destination: ${{ matrix.destination }}
+      - name: Pre-Build
         run: |
           gem install cocoapods-acknowledgements
           gem install cocoapods
@@ -24,11 +19,9 @@ jobs:
           pip install six
           git clone https://github.com/flutter/flutter.git --depth 1 -b beta
           $GITHUB_WORKSPACE/flutter/bin/flutter doctor
-          cd $GITHUB_WORKSPACE/example
-          $GITHUB_WORKSPACE/flutter/bin/flutter build ios --no-codesign
-      - name: build
-        env:
-          destination: ${{ matrix.destination }}
+
+      - name: Build
         run: |
+          $GITHUB_WORKSPACE/flutter/bin/flutter emulators --launch apple_ios_simulator
           cd $GITHUB_WORKSPACE/example
-          $GITHUB_WORKSPACE/flutter/bin/flutter build ios --no-codesign
+          $GITHUB_WORKSPACE/flutter/bin/flutter build ios --simulator --no-codesign
