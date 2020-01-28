@@ -9,6 +9,7 @@ class XyoDeviceChannel: XyoBaseChannel {
   private let onExitChannel: FlutterEventChannel
   private let onDetectChannel: FlutterEventChannel
   private let onStatusChannel: FlutterEventChannel
+  private let onConnectionChannel: FlutterEventChannel
   
   private let onEnter = EventStreamHandler()
   private let onExit = EventStreamHandler()
@@ -28,6 +29,8 @@ class XyoDeviceChannel: XyoBaseChannel {
     
     onStatusChannel = FlutterEventChannel(name:"\(name)OnStatus", binaryMessenger: registrar.messenger())
     
+    onConnectionChannel = FlutterEventChannel(name:"\(name)OnConnection", binaryMessenger: registrar.messenger())
+
     super.init(registrar: registrar, name: name)
     
     onEnterChannel.setStreamHandler(onEnter)
@@ -62,6 +65,9 @@ class XyoDeviceChannel: XyoBaseChannel {
     case "getStatus":
       reportStatus(XYBluetoothManager.scanner.currentStatus)
       break;
+    case "getPublicKey":
+      getPublicKey(call, result:result)
+      break;
     default:
       super.handle(call, result:result)
       break
@@ -88,6 +94,10 @@ class XyoDeviceChannel: XyoBaseChannel {
   
   private func gattList(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
     GattGroupRequest.process(arguments: call.arguments, result: result)
+  }
+  
+  private func getPublicKey(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+    result("")
   }
   
   func reportStatus(_ status: XYSmartScanStatus) {

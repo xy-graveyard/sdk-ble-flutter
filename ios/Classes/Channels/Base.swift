@@ -25,7 +25,7 @@ class XyoBaseChannel: FlutterMethodChannel, FlutterPlugin {
     
     init(registrar: FlutterPluginRegistrar, name: String) {
         methodChannel = FlutterMethodChannel(name:name, binaryMessenger: registrar.messenger())
-        eventChannel = FlutterEventChannel(name:"\(name)_events", binaryMessenger: registrar.messenger())
+        eventChannel = FlutterEventChannel(name:"\(name)events", binaryMessenger: registrar.messenger())
         super.init()
         registrar.addMethodCallDelegate(self, channel: methodChannel)
         eventChannel.setStreamHandler(events)

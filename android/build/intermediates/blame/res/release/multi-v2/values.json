@@ -1,0 +1,34 @@
+{
+    "logs": [
+        {
+            "outputFile": "/Users/arietrouw/GitHub/sdk-ble-flutter/android/build/intermediates/res/merged/release/values/values.xml",
+            "map": [
+                {
+                    "source": "/Users/arietrouw/.gradle/caches/transforms-2/files-2.1/15bfc85e6facb47c62c31632c1b06b64/sdk-xyobleinterface-android-2.1.545/res/values/values.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "53",
+                        "endOffsets": "104"
+                    }
+                }
+            ]
+        },
+        {
+            "outputFile": "/Users/arietrouw/GitHub/sdk-ble-flutter/android/build/intermediates/incremental/mergeReleaseResources/merged.dir/values/values.xml",
+            "map": [
+                {
+                    "source": "/Users/arietrouw/.gradle/caches/transforms-2/files-2.1/15bfc85e6facb47c62c31632c1b06b64/sdk-xyobleinterface-android-2.1.545/res/values/values.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "53",
+                        "endOffsets": "104"
+                    }
+                }
+            ]
+        }
+    ]
+}

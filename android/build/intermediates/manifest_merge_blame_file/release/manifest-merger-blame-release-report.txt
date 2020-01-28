@@ -1,0 +1,15 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="network.xyo.ble.xyo_ble" >
+4
+5    <uses-sdk android:minSdkVersion="21" />
+5-->/Users/arietrouw/GitHub/sdk-ble-flutter/android/src/main/AndroidManifest.xml
+6
+7    <uses-permission android:name="android.permission.BLUETOOTH" />
+7-->/Users/arietrouw/GitHub/sdk-ble-flutter/android/src/main/AndroidManifest.xml:3:5-67
+7-->/Users/arietrouw/GitHub/sdk-ble-flutter/android/src/main/AndroidManifest.xml:3:22-65
+8    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+8-->/Users/arietrouw/GitHub/sdk-ble-flutter/android/src/main/AndroidManifest.xml:4:5-73
+8-->/Users/arietrouw/GitHub/sdk-ble-flutter/android/src/main/AndroidManifest.xml:4:22-71
+9
+10</manifest>

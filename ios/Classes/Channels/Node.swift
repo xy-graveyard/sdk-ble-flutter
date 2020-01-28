@@ -5,8 +5,8 @@ class XyoNodeChannel: XyoBaseChannel {
         super.init(registrar: registrar, name: name)
     }
     
-    static var STATUS_STARTED = "started"
-    static var STATUS_STOPPED = "stopped"
+    static var STATUS_STARTED = "Started"
+    static var STATUS_STOPPED = "Stopped"
 
     var status = STATUS_STOPPED
 
