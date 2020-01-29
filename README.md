@@ -1,14 +1,34 @@
-# xyo_ble
+[logo]: https://cdn.xy.company/img/brand/XYO_full_colored.png
 
-A new flutter plugin project.
+[![logo]](https://xyo.network)
 
-## Getting Started
+![](https://github.com/XYOracleNetwork/sdk-ble-flutter/workflows/iOS%20Release/badge.svg?branch=develop)
+![](https://github.com/XYOracleNetwork/sdk-ble-flutter/workflows/Android%20Release/badge.svg?branch=develop)
 
-This project is a starting point for a Flutter
-[plug-in package](https://flutter.dev/developing-packages/),
-a specialized package that includes platform-specific implementation code for
-Android and/or iOS.
+# sdk-ble-flutter
 
-For help getting started with Flutter, view our 
-[online documentation](https://flutter.dev/docs), which offers tutorials, 
-samples, guidance on mobile development, and a full API reference.
+Table of Contents
+
+- [Title](#sdk-ble-flutter)
+- [Description](#description)
+- [Requirements](#security)
+- [Install](#install)
+- [SDK Overview](#sdk-overview)
+- [Code Examples](#code-examples)
+- [Sample Projects](#sample-projects)
+- [Maintainers](#maintainers)
+- [License](#license)
+- [Credits](#credits)
+
+## Maintainers
+
+- Kevin Weiler
+- Arie Trouw
+
+## License
+
+See the [LICENSE](LICENSE) file for license details.
+
+## Credits
+
+Made with 🔥and ❄️ by [XYO](https://www.xyo.network)
