@@ -1,0 +1,15 @@
+name: iOS Release
+
+on:
+  push:
+    branches:
+      - "master"
+
+jobs:
+  build:
+    runs-on: macOS-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Release
+        run: cd $GITHUB_WORKSPACE && bash $GITHUB_WORKSPACE/scripts/deploy.sh
