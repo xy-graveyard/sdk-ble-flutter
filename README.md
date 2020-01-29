@@ -2,7 +2,7 @@
 
 [![logo]](https://xyo.network)
 
-![](https://github.com/XYOracleNetwork/sdk-ble-flutter/workflows/iOS%20Release/badge.svg?branch=develop)
+![](https://github.com/XYOracleNetwork/sdk-ble-flutter/workflows/iOS%20Release/badge.svg)
 ![](https://github.com/XYOracleNetwork/sdk-ble-flutter/workflows/Android%20Release/badge.svg?branch=develop)
 
 # sdk-ble-flutter
