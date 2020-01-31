@@ -4,6 +4,7 @@
 
 ![](https://github.com/XYOracleNetwork/sdk-ble-flutter/workflows/iOS%20Build/badge.svg?branch=develop)
 ![](https://github.com/XYOracleNetwork/sdk-ble-flutter/workflows/Android%20Build/badge.svg?branch=develop)
+[![Known Vulnerabilities](https://snyk.io/test/github/XYOracleNetwork/sdk-ble-flutter/badge.svg?targetFile=android/build.gradle)](https://snyk.io/test/github/XYOracleNetwork/sdk-ble-flutter?targetFile=android/build.gradle)
 
 # sdk-ble-flutter
 
