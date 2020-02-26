@@ -1,4 +1,4 @@
-name: Release
+name: Publish Release
 
 on:
   push:
@@ -6,25 +6,29 @@ on:
       - "master"
 
 jobs:
-  build:
-    runs-on: macOS-latest
+  publish:
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v2
-      - name: Pre-Build
+      - name: Build and Publish
         run: |
-          gem install cocoapods-acknowledgements
-          gem install cocoapods
-          pod repo update
-          pip install six
           git clone https://github.com/flutter/flutter.git --depth 1 -b beta
+          export PATH="$PATH":$GITHUB_WORKSPACE/flutter/bin
           $GITHUB_WORKSPACE/flutter/bin/flutter doctor
+          flutter pub get
+          cd example
+          flutter packages pub run build_runner build --delete-conflicting-outputs
+          cd $GITHUB_WORKSPACE
+          mkdir ./flutter/.pub-cache/
+          cat <<EOF > ./flutter/.pub-cache/credentials.json 
+          {
+            "accessToken":"${{ secrets.ACCESS_TOKEN }}",
+            "refreshToken":"${{ secrets.REFRESH_TOKEN }}",
+            "tokenEndpoint":"https://accounts.google.com/o/oauth2/token",
+            "scopes":["openid","https://www.googleapis.com/auth/userinfo.email"],
+            "expiration":1564090897608
+          }
+          EOF
 
-      - name: Build
-        run: |
-          $GITHUB_WORKSPACE/flutter/bin/flutter emulators --launch apple_ios_simulator
-          cd $GITHUB_WORKSPACE/example
-          $GITHUB_WORKSPACE/flutter/bin/flutter build ios --simulator --no-codesign
-
-      - name: Release
-        run: cd $GITHUB_WORKSPACE && bash $GITHUB_WORKSPACE/scripts/deploy.sh
+          ./flutter/bin/flutter pub pub publish -f -v
