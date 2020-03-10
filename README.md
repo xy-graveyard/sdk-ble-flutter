@@ -20,6 +20,12 @@ Table of Contents
 - [License](#license)
 - [Credits](#credits)
 
+## Description
+
+A low-level SDK for XYO ble device operations. This SDK is integrated into the **XYO Flutter SDK**. Support channels for devices which include xy4, sentinels, bridges, iOS, and Android. There is also an Archivist interface available for bridge handling.
+
+We would advise you to use the plug-in-play **XYO Flutter SDK** for integration into your current app solution, but if you need more customization of device operations, then this SDK is available for you to integrate at the granular level.
+
 ## Maintainers
 
 - Kevin Weiler
