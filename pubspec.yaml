@@ -10,7 +10,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  protobuf: ^1.0.1
+  protobuf: ^0.13.15
   fixnum: ^0.10.9
   synchronized: 2.1.0+1
 
