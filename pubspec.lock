@@ -325,7 +325,7 @@ packages:
       name: protobuf
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.13.16+1"
+    version: "1.0.1"
   pub_semver:
     dependency: transitive
     description:
@@ -421,7 +421,7 @@ packages:
       name: test_api
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.2.11"
+    version: "0.2.15"
   timing:
     dependency: transitive
     description:
